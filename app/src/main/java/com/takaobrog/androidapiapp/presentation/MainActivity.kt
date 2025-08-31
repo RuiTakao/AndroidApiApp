@@ -1,10 +1,11 @@
-package com.takaobrog.androidapiapp
+package com.takaobrog.androidapiapp.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.takaobrog.androidapiapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
