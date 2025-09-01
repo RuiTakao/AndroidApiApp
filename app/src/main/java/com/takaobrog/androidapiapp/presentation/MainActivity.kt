@@ -6,17 +6,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
 import com.takaobrog.androidapiapp.R
+import com.takaobrog.androidapiapp.data.TestDataStoreRepository
 import com.takaobrog.androidapiapp.domain.TestRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+val AppCompatActivity.dataStore by preferencesDataStore(name = "settings")
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     // Todo API Test
     @Inject lateinit var repository: TestRepository
+
+    // Todo DataStore preferences Test
+    private val testDataStoreRepository by lazy {
+        TestDataStoreRepository(dataStore)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +46,16 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Api Test isFailure", result.toString())
 
             }
+        }
+
+        // Todo DataStore preferences Test
+        lifecycleScope.launch {
+            testDataStoreRepository.currentUserName.collect {
+                println(it)
+            }
+        }
+        lifecycleScope.launch {
+            testDataStoreRepository.saveUserName("TestName")
         }
     }
 }

@@ -60,4 +60,7 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
+
+    // DataStore preferences
+    implementation(libs.androidx.datastore.preferences)
 }
