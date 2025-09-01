@@ -37,21 +37,16 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Todo API Test
-        lifecycleScope.launch {
-            val result = repository.getTest()
-            if (result.isSuccess) {
-                Log.d("Api Test isSuccess", result.toString())
-            } else {
-                Log.d("Api Test isFailure", result.toString())
-
-            }
-        }
-
-        // Todo DataStore preferences Test
+        // Todo API Test & DataStore preferences Test
         lifecycleScope.launch {
             testDataStoreRepository.currentUserName.collect {
-                println(it)
+                val result = repository.getTest(it)
+                if (result.isSuccess) {
+                    Log.d("Api Test isSuccess", result.toString())
+                } else {
+                    Log.d("Api Test isFailure", result.toString())
+
+                }
             }
         }
         lifecycleScope.launch {

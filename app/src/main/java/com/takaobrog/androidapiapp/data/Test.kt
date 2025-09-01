@@ -6,4 +6,5 @@ import com.squareup.moshi.JsonClass
 data class Test(
     val id: Int? = null,
     val name: String,
+    val deviceId: String,
 )

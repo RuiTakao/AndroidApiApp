@@ -7,8 +7,8 @@ import javax.inject.Inject
 class TestRepositoryImpl @Inject constructor(
     private val apiService: TestApiService,
 ): TestRepository {
-    override suspend fun getTest(): Result<Test?> {
-        val res = apiService.getTest()
+    override suspend fun getTest(id: String): Result<Test?> {
+        val res = apiService.getTest(id)
         return if (res.isSuccessful) {
             Result.success(res.body())
         } else {
