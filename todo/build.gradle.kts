@@ -1,21 +1,13 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.library")
     alias(libs.plugins.kotlin.android)
-    id("dagger.hilt.android.plugin")
-    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.takaobrog.androidapiapp"
+    namespace = "com.takaobrog.todo"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.takaobrog.androidapiapp"
-        minSdk = 29
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -47,21 +39,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-
-    // Moshi
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    kapt(libs.moshi.kotlin.codegen)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-
-    // DataStore preferences
-    implementation(libs.androidx.datastore.preferences)
-    implementation(project(":todo"))
 }
