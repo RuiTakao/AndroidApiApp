@@ -1,9 +1,9 @@
 package com.takaobrog.androidapiapp.modules
 
 import com.squareup.moshi.Moshi
-import com.takaobrog.androidapiapp.domain.TestApiService
-import com.takaobrog.androidapiapp.domain.TestRepository
-import com.takaobrog.androidapiapp.domain.TestRepositoryImpl
+import com.takaobrog.androidapiapp.domain.remote.device.PostDeviceDataApiService
+import com.takaobrog.androidapiapp.domain.remote.device.PostDeviceDataRepository
+import com.takaobrog.androidapiapp.domain.remote.device.PostDeviceDataRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Named("base_url")
-    fun provideBaseUrl() = "http://10.0.2.2:8765/todos/"
+    fun provideBaseUrl() = "http://10.0.2.2:8765/"
 
     @Provides
     @Singleton
@@ -40,9 +40,10 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTestApi(retrofit: Retrofit): TestApiService = retrofit.create(TestApiService::class.java)
+    fun providePostDeviceDataApi(retrofit: Retrofit): PostDeviceDataApiService =
+        retrofit.create(PostDeviceDataApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideTestRepository(impl: TestRepositoryImpl): TestRepository = impl
+    fun providePostDeviceDataRepository(impl: PostDeviceDataRepositoryImpl): PostDeviceDataRepository = impl
 }

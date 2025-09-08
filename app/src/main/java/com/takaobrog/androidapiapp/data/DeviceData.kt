@@ -3,8 +3,7 @@ package com.takaobrog.androidapiapp.data
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Test(
+data class DeviceData(
     val id: Int? = null,
-    val name: String,
     val deviceId: String,
 )

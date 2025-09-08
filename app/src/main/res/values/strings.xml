@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">AndroidApiApp</string>
+
+    <!--  CreateDeviceData  -->
+    <string name="create_device_data_dialog_network_error_title">ネットワークエラー</string>
+    <string name="create_device_data_dialog_network_error_message">ネット環境の良い場所で起動してください</string>
+    <string name="create_device_data_dialog_network_error_ok">OK</string>
+    <string name="create_device_data_error_message">エラー：</string>
 </resources>
