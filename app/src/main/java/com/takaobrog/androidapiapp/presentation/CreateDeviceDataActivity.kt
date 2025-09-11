@@ -1,5 +1,6 @@
 package com.takaobrog.androidapiapp.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -9,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
 import com.takaobrog.androidapiapp.domain.local.device.PostDeviceDataStoreRepository
+import com.takaobrog.todo.TodoListActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -52,5 +54,7 @@ class CreateDeviceDataActivity : AppCompatActivity() {
                 }
             }
         }
+        // Todo: 呼び出し位置、修正　デバイスIDチェック後に呼び出す想定
+        startActivity(Intent(this, TodoListActivity::class.java))
     }
 }
