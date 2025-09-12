@@ -11,6 +11,18 @@
         android:label="fragment_todo"
         tools:layout="@layout/fragment_todo_list">
 
+        <action
+            android:id="@+id/action_todoListFragment_to_todoAddFragment"
+            app:destination="@+id/TodoAddFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TodoAddFragment"
+        android:name="com.takaobrog.todo.presentation.todo_add.TodoAddFragment"
+        android:label="fragment_todo_add"
+        tools:layout="@layout/fragment_todo_add">
+
     </fragment>
 
 </navigation>

@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.takaobrog.todo.R
 import com.takaobrog.todo.databinding.FragmentTodoListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,9 +28,15 @@ class TodoListFragment : Fragment() {
         val todoListRecyclerView = binding.recyclerView
         val linearLayout = LinearLayoutManager(binding.root.context)
         val adapter = TodoListAdapter()
+        val fab = binding.floatingActionButton
+        val nav = findNavController()
 
         todoListRecyclerView.layoutManager = linearLayout
         todoListRecyclerView.adapter = adapter
+
+        fab.setOnClickListener {
+            nav.navigate(R.id.action_todoListFragment_to_todoAddFragment)
+        }
 
         viewModel.todoList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
