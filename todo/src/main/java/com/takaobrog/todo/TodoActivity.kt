@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.takaobrog.todo.databinding.ActivityTodoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,8 +27,20 @@ class TodoActivity : AppCompatActivity() {
             insets
         }
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_todo_fragment_content_main) as NavHostFragment
-        navHostFragment.navController
+        setSupportActionBar(binding.todoToolbar)
+
+        val navController =
+            (supportFragmentManager.findFragmentById(R.id.nav_host_todo_fragment_content_main) as NavHostFragment)
+                .navController
+
+        setupActionBarWithNavController(navController = navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController =
+            (supportFragmentManager.findFragmentById(R.id.nav_host_todo_fragment_content_main) as NavHostFragment)
+                .navController
+
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
