@@ -5,7 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/valid_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="366dp"
         android:layout_height="374dp"
         android:layout_marginStart="16dp"
@@ -28,11 +40,11 @@
 
         <EditText
             android:id="@+id/todo_input_title"
-            android:background="#FFF59D"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:importantForAutofill="no"/>
+            android:background="#FFF59D"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <Space
             android:layout_width="match_parent"
@@ -42,16 +54,16 @@
             android:id="@+id/todo_content_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/todo_edit_content_label"
-            android:labelFor="@+id/edit_content"/>
+            android:labelFor="@+id/edit_content"
+            android:text="@string/todo_edit_content_label" />
 
         <EditText
             android:id="@+id/todo_input_content"
-            android:background="#FFF59D"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:inputType="text"
-            android:importantForAutofill="no"/>
+            android:background="#FFF59D"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <Space
             android:layout_width="match_parent"
@@ -63,4 +75,5 @@
             android:layout_height="wrap_content"
             android:text="@string/todo_edit_create_btn" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

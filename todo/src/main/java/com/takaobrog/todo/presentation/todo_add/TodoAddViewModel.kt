@@ -26,4 +26,30 @@ class TodoAddViewModel @Inject constructor(
 
         return repository.createTodo(todo)
     }
+
+    fun validMessage(title: String, content: String): String {
+        var message = ""
+        var titleMessage = ""
+        var contentMessage = ""
+        if (title.isEmpty()) {
+            titleMessage = "タイトルを入力してください"
+        }
+        if (title.length >= 10) {
+            titleMessage = "タイトルは10文字以下で入力してください"
+        }
+        if (content.isEmpty()) {
+            contentMessage = "内容を入力してください"
+        }
+        if (content.length >= 140) {
+            contentMessage = "内容は140文字以下で入力してください"
+        }
+        if (!titleMessage.isEmpty() || !contentMessage.isEmpty()) {
+            message = titleMessage
+            if (!message.isEmpty()) {
+                message += "\n"
+            }
+            message += contentMessage
+        }
+        return message
+    }
 }
