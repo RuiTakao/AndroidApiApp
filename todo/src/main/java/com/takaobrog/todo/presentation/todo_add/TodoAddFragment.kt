@@ -55,6 +55,10 @@ class TodoAddFragment : Fragment() {
                     )
                 res.onSuccess {
                     Log.d("TodoAddFragment", "todo insert success")
+                    findNavController()
+                        .previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("reload", true)
                     findNavController().popBackStack()
                     dialog = MaterialAlertDialogBuilder(requireContext())
                         .setTitle("登録に成功しました")
