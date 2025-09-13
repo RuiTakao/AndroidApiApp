@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/todoListFragment"
         android:name="com.takaobrog.todo.presentation.todo_list.TodoListFragment"
-        android:label="fragment_todo"
+        android:label="Todo一覧"
         tools:layout="@layout/fragment_todo_list">
 
         <action
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/TodoAddFragment"
         android:name="com.takaobrog.todo.presentation.todo_add.TodoAddFragment"
-        android:label="fragment_todo_add"
+        android:label="Todo登録"
         tools:layout="@layout/fragment_todo_add">
 
     </fragment>

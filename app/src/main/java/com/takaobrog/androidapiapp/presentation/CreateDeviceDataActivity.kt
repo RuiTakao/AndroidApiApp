@@ -12,7 +12,9 @@ import com.takaobrog.androidapiapp.R
 import com.takaobrog.androidapiapp.domain.local.device.PostDeviceDataStoreRepository
 import com.takaobrog.todo.TodoActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.util.UUID
 import kotlin.getValue
@@ -34,13 +36,15 @@ class CreateDeviceDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            println(deviceDataStoreRepository.hasDeviceData())
-            if (deviceDataStoreRepository.hasDeviceData()) {
+            if (deviceDataStoreRepository.getDeviceData() == null) {
                 val newDeviceId = UUID.randomUUID().toString()
                 try {
                     val res = viewModel.saveDeviceDataForServer(newDeviceId)
                     if (res.isSuccess) {
                         deviceDataStoreRepository.saveDeviceDataForLocal(newDeviceId)
+                        val intent = Intent(this@CreateDeviceDataActivity, TodoActivity::class.java)
+                            .putExtra("device_id", newDeviceId)
+                        startActivity(intent)
                     } else {
                         MaterialAlertDialogBuilder(this@CreateDeviceDataActivity)
                             .setTitle(getString(R.string.create_device_data_dialog_network_error_title))
@@ -52,9 +56,14 @@ class CreateDeviceDataActivity : AppCompatActivity() {
                 } catch (e: HttpException) {
                     Log.e(TAG, "${getString(R.string.create_device_data_error_message)}$e")
                 }
+            } else {
+                val deviceId = withContext(Dispatchers.IO) {
+                    deviceDataStoreRepository.getDeviceData()
+                }
+                val intent = Intent(this@CreateDeviceDataActivity, TodoActivity::class.java)
+                    .putExtra("device_id", deviceId)
+                startActivity(intent)
             }
         }
-        // Todo: 呼び出し位置、修正　デバイスIDチェック後に呼び出す想定
-        startActivity(Intent(this, TodoActivity::class.java))
     }
 }

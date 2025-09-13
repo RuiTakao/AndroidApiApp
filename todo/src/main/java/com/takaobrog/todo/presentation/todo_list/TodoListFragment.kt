@@ -31,6 +31,13 @@ class TodoListFragment : Fragment() {
         val fab = binding.floatingActionButton
         val nav = findNavController()
 
+        nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")?.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.fetchTodoList()
+                nav.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("reload")
+            }
+        }
+
         todoListRecyclerView.layoutManager = linearLayout
         todoListRecyclerView.adapter = adapter
 

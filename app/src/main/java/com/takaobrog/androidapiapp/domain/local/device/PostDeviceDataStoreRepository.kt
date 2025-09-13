@@ -13,7 +13,7 @@ class PostDeviceDataStoreRepository(
         val DEVICE_ID = stringPreferencesKey("device_id")
     }
 
-    suspend fun hasDeviceData() = dataStore.data.first()[DEVICE_ID] == null
+    suspend fun getDeviceData() = dataStore.data.first()[DEVICE_ID]
 
     suspend fun saveDeviceDataForLocal(newDeviceId: String) {
         dataStore.edit { it[DEVICE_ID] = newDeviceId }
