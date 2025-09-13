@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.takaobrog.todo.R
+import com.takaobrog.todo.data.Todo
 import com.takaobrog.todo.databinding.FragmentTodoListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,12 +32,24 @@ class TodoListFragment : Fragment() {
         val fab = binding.floatingActionButton
         val nav = findNavController()
 
-        nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")?.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.fetchTodoList()
-                nav.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("reload")
+        nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")
+            ?.observe(viewLifecycleOwner) {
+                if (it) {
+                    viewModel.fetchTodoList()
+                    nav.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("reload")
+                }
             }
-        }
+
+        adapter.setOnTodoCellClickListener(
+            object : TodoListAdapter.OnTodoCellClickListener {
+                override fun onItemClick(todo: Todo) {
+                    val id = todo.id ?: 0
+                    val action =
+                        TodoListFragmentDirections.actionTodoListFragmentToTodoDetailFragment(id)
+                    findNavController().navigate(action)
+                }
+            }
+        )
 
         todoListRecyclerView.layoutManager = linearLayout
         todoListRecyclerView.adapter = adapter

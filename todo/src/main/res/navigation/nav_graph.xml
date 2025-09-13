@@ -15,6 +15,10 @@
             android:id="@+id/action_todoListFragment_to_todoAddFragment"
             app:destination="@+id/TodoAddFragment" />
 
+        <action
+            android:id="@+id/action_todoListFragment_to_todoDetailFragment"
+            app:destination="@+id/TodoDetailFragment" />
+
     </fragment>
 
     <fragment
@@ -22,6 +26,18 @@
         android:name="com.takaobrog.todo.presentation.todo_add.TodoAddFragment"
         android:label="Todo登録"
         tools:layout="@layout/fragment_todo_add">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TodoDetailFragment"
+        android:name="com.takaobrog.todo.presentation.todo_detail.TodoDetailFragment"
+        android:label="fragment_todo_detail"
+        tools:layout="@layout/fragment_todo_detail">
+
+        <argument
+            android:name="todoId"
+            app:argType="integer" />
 
     </fragment>
 

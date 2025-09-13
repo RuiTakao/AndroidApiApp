@@ -8,11 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.takaobrog.todo.data.Todo
 import com.takaobrog.todo.databinding.CellTodoListBinding
 
-class TodoListAdapter: ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
+class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
+
+    interface OnTodoCellClickListener {
+        fun onItemClick(todo: Todo)
+    }
+
+    private var listener: OnTodoCellClickListener? = null
+    fun setOnTodoCellClickListener(l: OnTodoCellClickListener) {
+        listener = l
+    }
+
     class VH(val binding: CellTodoListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = CellTodoListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            CellTodoListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
 
@@ -21,6 +32,12 @@ class TodoListAdapter: ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
 
         with(holder.binding) {
             todoTitle.text = todo.title
+
+            root.setOnClickListener {
+                if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                    listener?.onItemClick(todo)
+                }
+            }
         }
     }
 
