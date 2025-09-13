@@ -22,4 +22,9 @@ class TodoRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun createTodo(todo: Todo): Result<Unit> = runCatching {
+        val res = apiService.createTodo(todo)
+        if (!res.isSuccessful) throw HttpException(res)
+    }
 }

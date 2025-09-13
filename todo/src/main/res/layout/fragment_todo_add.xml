@@ -21,13 +21,13 @@
 
         <TextView
             android:id="@+id/todo_title_label"
-            android:layout_width="11dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:labelFor="@+id/edit_title"
             android:text="@string/todo_edit_title_label" />
 
         <EditText
-            android:id="@+id/todo_title_input"
+            android:id="@+id/todo_input_title"
             android:background="#FFF59D"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:labelFor="@+id/edit_content"/>
 
         <EditText
-            android:id="@+id/todo_content_input"
+            android:id="@+id/todo_input_content"
             android:background="#FFF59D"
             android:layout_width="match_parent"
             android:layout_height="50dp"
