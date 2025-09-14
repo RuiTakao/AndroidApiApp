@@ -7,4 +7,9 @@
     <string name="todo_edit_title_label">タイトル</string>
     <string name="todo_edit_content_label">内容</string>
     <string name="todo_edit_create_btn">登録</string>
+
+    <!--  詳細画面  -->
+    <string name="todo_detail_edit_btn">編集</string>
+    <string name="todo_detail_delete_btn">削除</string>
+
 </resources>

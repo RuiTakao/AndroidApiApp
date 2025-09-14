@@ -23,6 +23,19 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getTodo(id: Int): Result<Todo?> {
+        return try {
+            val res = apiService.getTodo(id)
+            if (res.isSuccessful) {
+                Result.success(res.body())
+            } else {
+                Result.failure(HttpException(res))
+            }
+        } catch (e: IOException) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun createTodo(todo: Todo): Result<Unit> = runCatching {
         val res = apiService.createTodo(todo)
         if (!res.isSuccessful) throw HttpException(res)
