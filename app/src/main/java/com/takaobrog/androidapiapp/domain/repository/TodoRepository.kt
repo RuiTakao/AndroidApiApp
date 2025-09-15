@@ -1,6 +1,6 @@
-package com.takaobrog.androidapiapp.domain.remote.device
+package com.takaobrog.androidapiapp.domain.repository
 
-import com.takaobrog.androidapiapp.data.Todo
+import com.takaobrog.androidapiapp.domain.model.Todo
 
 interface TodoRepository {
     suspend fun getTodos(): Result<List<Todo>>

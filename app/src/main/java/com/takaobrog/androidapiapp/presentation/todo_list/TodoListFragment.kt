@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.takaobrog.androidapiapp.R
-import com.takaobrog.androidapiapp.data.Todo
+import com.takaobrog.androidapiapp.domain.model.Todo
 import com.takaobrog.androidapiapp.databinding.FragmentTodoListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
