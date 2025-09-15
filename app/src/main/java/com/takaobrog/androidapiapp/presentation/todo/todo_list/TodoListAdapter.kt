@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
 
 class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
@@ -14,9 +14,18 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
         fun onItemClick(todo: Todo)
     }
 
+    interface OnTodoCellCheckDoneListener {
+        fun onItemCheck(id: Int, isDone: Boolean)
+    }
+
     private var listener: OnTodoCellClickListener? = null
     fun setOnTodoCellClickListener(l: OnTodoCellClickListener) {
         listener = l
+    }
+
+    private var isDoneCheckListener: OnTodoCellCheckDoneListener? = null
+    fun setOnTodoCellCheckDoneListener(l: OnTodoCellCheckDoneListener) {
+        isDoneCheckListener = l
     }
 
     class VH(val binding: CellTodoListBinding) : RecyclerView.ViewHolder(binding.root)
@@ -32,6 +41,15 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
 
         with(holder.binding) {
             todoTitle.text = todo.title
+            todoContent.text = todo.content
+            isDone.isChecked = todo.done
+            datetime.text = todo.createdAt
+
+            isDone.setOnCheckedChangeListener { _, isChecked ->
+                if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                    isDoneCheckListener?.onItemCheck(todo.id ?: 0, isChecked)
+                }
+            }
 
             root.setOnClickListener {
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {

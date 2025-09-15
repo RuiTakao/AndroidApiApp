@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.domain.model
+package com.takaobrog.androidapiapp.domain.model.todo
 
 import com.squareup.moshi.JsonClass
 

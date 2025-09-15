@@ -84,4 +84,7 @@ dependencies {
 
     // DataStore preferences
     implementation(libs.androidx.datastore.preferences)
+
+    // Swipe
+    implementation(libs.androidx.swiperefreshlayout)
 }

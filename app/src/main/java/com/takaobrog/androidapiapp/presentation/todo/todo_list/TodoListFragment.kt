@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.databinding.FragmentTodoListBinding
+import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +32,7 @@ class TodoListFragment : Fragment() {
         val linearLayout = LinearLayoutManager(binding.root.context)
         val adapter = TodoListAdapter()
         val fab = binding.floatingActionButton
+        val swipe = binding.swipe
         val nav = findNavController()
 
         nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")
@@ -51,6 +54,14 @@ class TodoListFragment : Fragment() {
             }
         )
 
+        adapter.setOnTodoCellCheckDoneListener(
+            object : TodoListAdapter.OnTodoCellCheckDoneListener {
+                override fun onItemCheck(id: Int, isDone: Boolean) {
+                    viewModel.updateDone(id, isDone)
+                }
+            }
+        )
+
         todoListRecyclerView.layoutManager = linearLayout
         todoListRecyclerView.adapter = adapter
 
@@ -60,13 +71,36 @@ class TodoListFragment : Fragment() {
 
         viewModel.todoList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            swipe.isRefreshing = false
+        }
+
+        viewModel.dialogEvent.observe(viewLifecycleOwner) {
+            val dialog = it.getContentIfNotHandled() ?: return@observe
+            showDialog(dialog)
+        }
+
+        viewModel.reloading.observe(viewLifecycleOwner) {
+            swipe.isRefreshing = it
+        }
+
+        swipe.setOnRefreshListener {
+            viewModel.reloading()
         }
 
         return binding.root
     }
 
+    private fun showDialog(dialog: TodoAlertDialog) =
+        MaterialAlertDialogBuilder(requireContext()).setTitle(dialog.title)
+            .setMessage(dialog.message)
+            .setPositiveButton(dialog.positiveText) { _, _ ->
+                viewModel.reloading()
+            }
+            .show()
+
     override fun onDestroy() {
         super.onDestroy()
+        binding.recyclerView.adapter = null
         _binding = null
     }
 }
