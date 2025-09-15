@@ -1,8 +1,8 @@
-package com.takaobrog.androidapiapp.presentation.todo_add
+package com.takaobrog.androidapiapp.presentation.todo.todo_add
 
 import androidx.lifecycle.ViewModel
-import com.takaobrog.androidapiapp.data.Todo
-import com.takaobrog.androidapiapp.domain.remote.device.TodoRepository
+import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.Date

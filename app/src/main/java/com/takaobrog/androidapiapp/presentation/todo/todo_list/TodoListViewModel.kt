@@ -1,12 +1,12 @@
-package com.takaobrog.androidapiapp.presentation.todo_list
+package com.takaobrog.androidapiapp.presentation.todo.todo_list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.data.Todo
-import com.takaobrog.androidapiapp.domain.remote.device.TodoRepository
+import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

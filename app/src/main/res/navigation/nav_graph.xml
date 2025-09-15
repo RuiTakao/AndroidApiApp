@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/todoListFragment"
-        android:name="com.takaobrog.androidapiapp.presentation.todo_list.TodoListFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo.todo_list.TodoListFragment"
         android:label="Todo一覧"
         tools:layout="@layout/fragment_todo_list">
 
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/TodoAddFragment"
-        android:name="com.takaobrog.androidapiapp.presentation.todo_add.TodoAddFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo.todo_add.TodoAddFragment"
         android:label="Todo登録"
         tools:layout="@layout/fragment_todo_add">
 
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/TodoDetailFragment"
-        android:name="com.takaobrog.androidapiapp.presentation.todo_detail.TodoDetailFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo.todo_detail.TodoDetailFragment"
         android:label="fragment_todo_detail"
         tools:layout="@layout/fragment_todo_detail">
 

@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.presentation.todo_detail
+package com.takaobrog.androidapiapp.presentation.todo.todo_detail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.data.Todo
-import com.takaobrog.androidapiapp.domain.local.device.PostDeviceDataStoreRepository
-import com.takaobrog.androidapiapp.domain.remote.device.TodoRepository
+import com.takaobrog.androidapiapp.data.repository.DeviceDataRepositoryImpl
+import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoDetailViewModel @Inject constructor(
     private val repository: TodoRepository,
-    private val deviceDataStoreRepository: PostDeviceDataStoreRepository,
+    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val todoId: Int = checkNotNull(savedStateHandle["todoId"])

@@ -1,11 +1,11 @@
-package com.takaobrog.androidapiapp.presentation.todo_list
+package com.takaobrog.androidapiapp.presentation.todo.todo_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.takaobrog.androidapiapp.data.Todo
+import com.takaobrog.androidapiapp.domain.model.Todo
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
 
 class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {

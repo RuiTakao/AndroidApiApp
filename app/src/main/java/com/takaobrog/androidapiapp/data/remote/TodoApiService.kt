@@ -1,6 +1,6 @@
-package com.takaobrog.androidapiapp.domain.remote.device
+package com.takaobrog.androidapiapp.data.remote
 
-import com.takaobrog.androidapiapp.data.Todo
+import com.takaobrog.androidapiapp.domain.model.Todo
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

@@ -1,14 +1,15 @@
-package com.takaobrog.androidapiapp.domain.remote.device
+package com.takaobrog.androidapiapp.data.repository
 
-import com.takaobrog.androidapiapp.data.Todo
-import com.takaobrog.androidapiapp.domain.local.device.PostDeviceDataStoreRepository
+import com.takaobrog.androidapiapp.data.remote.TodoApiService
+import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
 class TodoRepositoryImpl @Inject constructor(
     private val apiService: TodoApiService,
-    private val deviceDataStoreRepository: PostDeviceDataStoreRepository,
+    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
 ) : TodoRepository {
     override suspend fun getTodos(): Result<List<Todo>> {
         return try {

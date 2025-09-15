@@ -1,11 +1,11 @@
-package com.takaobrog.androidapiapp.domain.remote.device
+package com.takaobrog.androidapiapp.data.remote
 
-import com.takaobrog.androidapiapp.data.DeviceData
+import com.takaobrog.androidapiapp.domain.model.DeviceData
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface PostDeviceDataApiService {
+interface DeviceDataApiService {
     @POST("devices/post/")
     suspend fun postDeviceData(
         @Body deviceData: DeviceData,

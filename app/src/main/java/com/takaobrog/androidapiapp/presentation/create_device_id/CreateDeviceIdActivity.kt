@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.presentation
+package com.takaobrog.androidapiapp.presentation.create_device_id
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,32 +8,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
+import com.takaobrog.androidapiapp.presentation.todo.TodoActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
-private val TAG = CreateDeviceDataActivity::class.java.simpleName
+private val TAG = CreateDeviceIdActivity::class.java.simpleName
 
 @AndroidEntryPoint
-class CreateDeviceDataActivity : AppCompatActivity() {
+class CreateDeviceIdActivity : AppCompatActivity() {
 
-    private val viewModel: CreateDeviceDataViewModel by viewModels()
+    private val viewModel: CreateDeviceIdViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             if (viewModel.hasDeviceId()) {
                 try {
-                    val res = viewModel.saveDeviceData()
+                    val res = viewModel.createDeviceId()
                     if (res.isSuccess) {
                         startActivity(
                             Intent(
-                                this@CreateDeviceDataActivity,
+                                this@CreateDeviceIdActivity,
                                 TodoActivity::class.java
                             )
                         )
                     } else {
-                        MaterialAlertDialogBuilder(this@CreateDeviceDataActivity)
+                        MaterialAlertDialogBuilder(this@CreateDeviceIdActivity)
                             .setTitle(getString(R.string.create_device_data_dialog_network_error_title))
                             .setMessage(getString(R.string.create_device_data_dialog_network_error_message))
                             .setPositiveButton(
@@ -46,7 +46,7 @@ class CreateDeviceDataActivity : AppCompatActivity() {
                     Log.e(TAG, "${getString(R.string.create_device_data_error_message)}$e")
                 }
             } else {
-                startActivity(Intent(this@CreateDeviceDataActivity, TodoActivity::class.java))
+                startActivity(Intent(this@CreateDeviceIdActivity, TodoActivity::class.java))
             }
         }
     }
