@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/todoListFragment">
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo_list.TodoListFragment"
+        android:label="Todo一覧"
+        tools:layout="@layout/fragment_todo_list">
+
+        <action
+            android:id="@+id/action_todoListFragment_to_todoAddFragment"
+            app:destination="@+id/TodoAddFragment" />
+
+        <action
+            android:id="@+id/action_todoListFragment_to_todoDetailFragment"
+            app:destination="@+id/TodoDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TodoAddFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo_add.TodoAddFragment"
+        android:label="Todo登録"
+        tools:layout="@layout/fragment_todo_add">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/TodoDetailFragment"
+        android:name="com.takaobrog.androidapiapp.presentation.todo_detail.TodoDetailFragment"
+        android:label="fragment_todo_detail"
+        tools:layout="@layout/fragment_todo_detail">
+
+        <argument
+            android:name="todoId"
+            app:argType="integer" />
+
+    </fragment>
+
+</navigation>

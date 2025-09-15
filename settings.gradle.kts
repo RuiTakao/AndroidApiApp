@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidApiApp"
 include(":app")
-include(":todo")

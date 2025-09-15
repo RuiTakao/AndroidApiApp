@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -31,6 +32,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -68,5 +72,4 @@ dependencies {
 
     // DataStore preferences
     implementation(libs.androidx.datastore.preferences)
-    implementation(project(":todo"))
 }
