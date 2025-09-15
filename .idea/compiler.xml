@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="AndroidApiApp.app.todo" target="21" />
+      <module name="AndroidApiApp.todo" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
