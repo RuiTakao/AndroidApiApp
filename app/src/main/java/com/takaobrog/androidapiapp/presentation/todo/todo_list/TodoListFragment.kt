@@ -54,6 +54,15 @@ class TodoListFragment : Fragment() {
             }
         )
 
+        adapter.setOnTodoCellCheckDoneListener(
+            object : TodoListAdapter.OnTodoCellCheckDoneListener {
+                override fun onItemCheck(todo: Todo, isDone: Boolean) {
+                    println(todo)
+                    println(isDone)
+                }
+            }
+        )
+
         todoListRecyclerView.layoutManager = linearLayout
         todoListRecyclerView.adapter = adapter
 

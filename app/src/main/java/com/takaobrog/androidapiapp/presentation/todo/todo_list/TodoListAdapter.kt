@@ -14,9 +14,18 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
         fun onItemClick(todo: Todo)
     }
 
+    interface OnTodoCellCheckDoneListener {
+        fun onItemCheck(todo: Todo, isDone: Boolean)
+    }
+
     private var listener: OnTodoCellClickListener? = null
     fun setOnTodoCellClickListener(l: OnTodoCellClickListener) {
         listener = l
+    }
+
+    private var isDoneCheckListener: OnTodoCellCheckDoneListener? = null
+    fun setOnTodoCellCheckDoneListener(l: OnTodoCellCheckDoneListener) {
+        isDoneCheckListener = l
     }
 
     class VH(val binding: CellTodoListBinding) : RecyclerView.ViewHolder(binding.root)
@@ -35,6 +44,12 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
             todoContent.text = todo.content
             isDone.isChecked = todo.done
             datetime.text = todo.createdAt
+
+            isDone.setOnCheckedChangeListener { _, isChecked ->
+                if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                    isDoneCheckListener?.onItemCheck(todo, isChecked)
+                }
+            }
 
             root.setOnClickListener {
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
