@@ -19,6 +19,9 @@ class TodoListViewModel @Inject constructor(
     private val _todoList = MutableLiveData<List<Todo>>()
     val todoList: LiveData<List<Todo>> = _todoList
 
+    private val _reloading = MutableLiveData(false)
+    val reloading: LiveData<Boolean> = _reloading
+
     init {
         load()
     }
@@ -29,7 +32,14 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
-    suspend fun fetchTodoList() {
+    fun reloading() {
+        viewModelScope.launch {
+            _reloading.value = false
+            fetchTodoList()
+        }
+    }
+
+    private suspend fun fetchTodoList() {
         val result = withContext(Dispatchers.IO) { repository.getTodoList() }
         if (result.isSuccess) {
             val list = result.getOrNull().orEmpty()

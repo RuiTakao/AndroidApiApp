@@ -30,6 +30,7 @@ class TodoListFragment : Fragment() {
         val linearLayout = LinearLayoutManager(binding.root.context)
         val adapter = TodoListAdapter()
         val fab = binding.floatingActionButton
+        val swipe = binding.swipe
         val nav = findNavController()
 
         nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")
@@ -60,6 +61,15 @@ class TodoListFragment : Fragment() {
 
         viewModel.todoList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            swipe.isRefreshing = false
+        }
+
+        viewModel.reloading.observe(viewLifecycleOwner) {
+            swipe.isRefreshing = it
+        }
+
+        swipe.setOnRefreshListener {
+            viewModel.reloading()
         }
 
         return binding.root
