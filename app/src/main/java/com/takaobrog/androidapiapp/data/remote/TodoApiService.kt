@@ -1,5 +1,6 @@
 package com.takaobrog.androidapiapp.data.remote
 
+import com.takaobrog.androidapiapp.domain.model.CreateTodoRequest
 import com.takaobrog.androidapiapp.domain.model.Todo
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,6 +23,6 @@ interface TodoApiService {
 
     @POST("todos/create")
     suspend fun createTodo(
-        @Body todo: Todo
+        @Body createTodoRequest: CreateTodoRequest,
     ): Response<Unit>
 }

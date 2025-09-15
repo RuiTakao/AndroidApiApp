@@ -7,7 +7,6 @@ data class Todo(
     val id: Int? = null,
     val title: String,
     val content: String,
-    val done: Boolean,
-    val deviceId: String,
+    val done: Boolean = false,
     val createdAt: String,
 )

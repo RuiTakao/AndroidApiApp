@@ -2,11 +2,15 @@ package com.takaobrog.androidapiapp.data.repository
 
 import android.util.Log
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
+import com.takaobrog.androidapiapp.domain.model.CreateTodoRequest
 import com.takaobrog.androidapiapp.domain.model.Todo
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.androidapiapp.time.TimeProvider
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.collections.orEmpty
 
@@ -15,6 +19,7 @@ private val TAG = TodoRepositoryImpl::class.java.simpleName
 class TodoRepositoryImpl @Inject constructor(
     private val apiService: TodoApiService,
     private val deviceDataRepository: DeviceDataRepository,
+    private val time: TimeProvider,
 ) : TodoRepository {
     override suspend fun getTodoList(): Result<List<Todo>> {
         return try {
@@ -48,8 +53,20 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createTodo(todo: Todo): Result<Unit> = runCatching {
-        val res = apiService.createTodo(todo)
+    override suspend fun createTodo(title: String, content: String): Result<Unit> = runCatching {
+        val now = time.now()
+        val createdAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+            .format(now.atOffset(ZoneOffset.UTC))
+
+        val createTodoRequest = CreateTodoRequest(
+            todo = Todo(
+                title = title,
+                content = content,
+                createdAt = createdAt,
+            ),
+            deviceId = deviceDataRepository.deviceId()
+        )
+        val res = apiService.createTodo(createTodoRequest)
         if (!res.isSuccessful) throw HttpException(res)
     }
 }

@@ -29,8 +29,6 @@ class TodoAddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val deviceId = requireActivity().intent.getStringExtra("device_id") ?: ""
-
         _binding = FragmentTodoAddBinding.inflate(inflater, container, false)
         val editTextTitle = binding.todoInputTitle
         val editTextContent = binding.todoInputContent
@@ -51,7 +49,6 @@ class TodoAddFragment : Fragment() {
                     viewModel.createTodo(
                         title = title,
                         content = content,
-                        deviceId = deviceId,
                     )
                 res.onSuccess {
                     Log.d("TodoAddFragment", "todo insert success")

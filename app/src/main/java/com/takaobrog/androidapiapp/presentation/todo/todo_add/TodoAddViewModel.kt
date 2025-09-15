@@ -1,30 +1,16 @@
 package com.takaobrog.androidapiapp.presentation.todo.todo_add
 
 import androidx.lifecycle.ViewModel
-import com.takaobrog.androidapiapp.domain.model.Todo
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class TodoAddViewModel @Inject constructor(
     private val repository: TodoRepository,
 ) : ViewModel() {
-    val df = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPAN)
-
-    suspend fun createTodo(title: String, content: String, deviceId: String): Result<Unit> {
-        val todo = Todo(
-            title = title,
-            content = content,
-            done = false,
-            deviceId = deviceId,
-            createdAt = df.format(Date()),
-        )
-
-        return repository.createTodo(todo)
+    suspend fun createTodo(title: String, content: String): Result<Unit> {
+        return repository.createTodo(title = title, content = content)
     }
 
     fun validMessage(title: String, content: String): String {
