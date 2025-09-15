@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.data.repository.DeviceDataRepositoryImpl
 import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoDetailViewModel @Inject constructor(
     private val repository: TodoRepository,
-    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val todoId: Int = checkNotNull(savedStateHandle["todoId"])
@@ -27,19 +25,26 @@ class TodoDetailViewModel @Inject constructor(
     val todo: LiveData<Todo?> = _todo
 
     init {
-        fetchTodo(todoId)
+        load()
     }
 
-    fun fetchTodo(id: Int) {
+    fun load() {
         viewModelScope.launch {
-            println("detail ${deviceDataStoreRepository.deviceId()}")
-            val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
-            if (result.isSuccess) {
-                val data = result.getOrNull()
-                withContext(Dispatchers.Main) { _todo.value = data }
-            } else {
-                Log.e("TodoDetailViewModel", "Todo get failure")
-            }
+            fetchTodo(todoId)
+        }
+    }
+
+    fun update(title: String, content: String) {
+
+    }
+
+    private suspend fun fetchTodo(id: Int) {
+        val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
+        if (result.isSuccess) {
+            val data = result.getOrNull()
+            withContext(Dispatchers.Main) { _todo.value = data }
+        } else {
+            Log.e("TodoDetailViewModel", "Todo get failure")
         }
     }
 }
