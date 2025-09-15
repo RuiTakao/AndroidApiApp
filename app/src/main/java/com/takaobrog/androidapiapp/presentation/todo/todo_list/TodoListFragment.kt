@@ -35,7 +35,7 @@ class TodoListFragment : Fragment() {
         nav.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("reload")
             ?.observe(viewLifecycleOwner) {
                 if (it) {
-                    viewModel.fetchTodoList()
+                    viewModel.load()
                     nav.currentBackStackEntry?.savedStateHandle?.remove<Boolean>("reload")
                 }
             }

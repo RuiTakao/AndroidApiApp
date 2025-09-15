@@ -20,16 +20,20 @@ class TodoListViewModel @Inject constructor(
     val todoList: LiveData<List<Todo>> = _todoList
 
     init {
-        fetchTodoList()
+        load()
     }
 
-    fun fetchTodoList() {
+    fun load() {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) { repository.getTodoList() }
-            if (result.isSuccess) {
-                val list = result.getOrNull().orEmpty()
-                withContext(Dispatchers.Main) { _todoList.value = list }
-            }
+            fetchTodoList()
+        }
+    }
+
+    suspend fun fetchTodoList() {
+        val result = withContext(Dispatchers.IO) { repository.getTodoList() }
+        if (result.isSuccess) {
+            val list = result.getOrNull().orEmpty()
+            withContext(Dispatchers.Main) { _todoList.value = list }
         }
     }
 }
