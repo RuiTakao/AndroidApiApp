@@ -32,6 +32,9 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
 
         with(holder.binding) {
             todoTitle.text = todo.title
+            todoContent.text = todo.content
+            isDone.isChecked = todo.done
+            datetime.text = todo.createdAt
 
             root.setOnClickListener {
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
