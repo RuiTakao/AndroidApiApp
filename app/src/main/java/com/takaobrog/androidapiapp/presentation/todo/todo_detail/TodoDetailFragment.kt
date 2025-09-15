@@ -35,6 +35,9 @@ class TodoDetailFragment : Fragment() {
         val deleteBtn = binding.deleteBtn
 
         viewModel.todo.observe(viewLifecycleOwner) {
+            if (it?.done != null && it.done) {
+                done.isChecked = true
+            }
             val dialogTitle = it?.title
             title.text = it?.title
             content.text = it?.content
