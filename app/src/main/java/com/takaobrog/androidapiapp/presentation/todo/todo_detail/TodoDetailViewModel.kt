@@ -38,6 +38,10 @@ class TodoDetailViewModel @Inject constructor(
 
     }
 
+    fun delete() {
+
+    }
+
     private suspend fun fetchTodo(id: Int) {
         val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
         if (result.isSuccess) {

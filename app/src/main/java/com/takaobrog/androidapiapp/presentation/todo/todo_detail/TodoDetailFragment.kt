@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.databinding.DialogTodoEditBinding
 import com.takaobrog.androidapiapp.databinding.FragmentTodoDetailBinding
@@ -20,7 +21,7 @@ class TodoDetailFragment : Fragment() {
 
     private val viewModel: TodoDetailViewModel by viewModels()
 
-    private var addDialog: AlertDialog? = null
+    private var dialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +35,12 @@ class TodoDetailFragment : Fragment() {
         val deleteBtn = binding.deleteBtn
 
         viewModel.todo.observe(viewLifecycleOwner) {
+            val dialogTitle = it?.title
             title.text = it?.title
             content.text = it?.content
+            deleteBtn.setOnClickListener {
+                showDeleteDialog(dialogTitle)
+            }
         }
 
         editBtn.setOnClickListener {
@@ -53,7 +58,7 @@ class TodoDetailFragment : Fragment() {
             title.setText(it?.title)
             content.setText(it?.content)
         }
-        addDialog = MaterialAlertDialogBuilder(requireContext())
+        dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("編集")
             .setView(dialogBinding.root)
             .setNegativeButton("キャンセル", null)
@@ -74,8 +79,29 @@ class TodoDetailFragment : Fragment() {
             }
     }
 
+    private fun showDeleteDialog(dialogTitle: String?) {
+        dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("${dialogTitle}を削除しますか？")
+            .setNegativeButton("キャンセル", null)
+            .setPositiveButton("削除", null)
+            .create()
+            .apply {
+                setOnShowListener {
+                    val positive = getButton(AlertDialog.BUTTON_POSITIVE)
+                    positive.setOnClickListener {
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set("refresh", true)
+                        findNavController().popBackStack()
+                        dismiss()
+                        Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
+                        viewModel.delete()
+                    }
+                }
+                show()
+            }
+    }
+
     override fun onDestroyView() {
-        addDialog = null
+        dialog = null
         super.onDestroyView()
     }
 }
