@@ -9,8 +9,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TodoApiService {
-    @GET("todos/todos")
-    suspend fun getTodos(): Response<List<Todo>>
+    @GET("todos/todo_list")
+    suspend fun getTodoList(
+        @Query("deviceId") deviceId: String,
+    ): Response<List<Todo>>
 
     @GET("todos/todo/{todoId}")
     suspend fun getTodo(
