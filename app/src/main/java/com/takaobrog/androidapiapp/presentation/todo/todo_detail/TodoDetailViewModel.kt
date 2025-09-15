@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+private val TAG = TodoDetailViewModel::class.simpleName
+
 @HiltViewModel
 class TodoDetailViewModel @Inject constructor(
     private val repository: TodoRepository,
@@ -34,8 +36,21 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    fun update(title: String, content: String) {
+    fun reloading() {
+        viewModelScope.launch {
+            fetchTodo(todoId)
+        }
+    }
 
+    fun update(title: String, content: String) {
+        viewModelScope.launch {
+            val res = repository.update(todoId, title, content)
+            if (res.isSuccess) {
+                fetchTodo(todoId)
+            } else {
+                Log.e(TAG, "[update] update todo failure")
+            }
+        }
     }
 
     fun delete() {

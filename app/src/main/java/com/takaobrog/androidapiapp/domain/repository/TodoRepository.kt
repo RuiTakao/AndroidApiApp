@@ -9,5 +9,7 @@ interface TodoRepository {
 
     suspend fun createTodo(title: String, content: String): Result<Unit>
 
+    suspend fun update(id: Int, title: String, content: String): Result<Unit>
+
     suspend fun updateDone(id: Int, isDone: Boolean): Result<Unit>
 }
