@@ -1,8 +1,8 @@
 package com.takaobrog.androidapiapp.di
 
-import com.takaobrog.androidapiapp.data.repository.PostDeviceDataRepositoryImpl
+import com.takaobrog.androidapiapp.data.repository.DeviceDataRepositoryImpl
 import com.takaobrog.androidapiapp.data.repository.TodoRepositoryImpl
-import com.takaobrog.androidapiapp.domain.repository.DeviceRepository
+import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.Binds
 import dagger.Module
@@ -16,8 +16,8 @@ abstract class RepositoryBindModule {
 
     @Binds @Singleton
     abstract fun bindDeviceRepository(
-        impl: PostDeviceDataRepositoryImpl
-    ): DeviceRepository
+        impl: DeviceDataRepositoryImpl
+    ): DeviceDataRepository
 
     @Binds @Singleton
     abstract fun bindTodoRepository(

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class TodoRepositoryImpl @Inject constructor(
     private val apiService: TodoApiService,
-    private val deviceDataStoreRepository: PostDeviceDataRepositoryImpl,
+    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
 ) : TodoRepository {
     override suspend fun getTodos(): Result<List<Todo>> {
         return try {

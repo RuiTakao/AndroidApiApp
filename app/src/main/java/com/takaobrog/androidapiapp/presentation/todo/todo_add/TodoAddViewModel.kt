@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.presentation.todo_add
+package com.takaobrog.androidapiapp.presentation.todo.todo_add
 
 import androidx.lifecycle.ViewModel
 import com.takaobrog.androidapiapp.domain.model.Todo

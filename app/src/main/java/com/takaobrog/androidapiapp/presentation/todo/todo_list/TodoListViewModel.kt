@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.presentation.todo_list
+package com.takaobrog.androidapiapp.presentation.todo.todo_list
 
 import android.util.Log
 import androidx.lifecycle.LiveData

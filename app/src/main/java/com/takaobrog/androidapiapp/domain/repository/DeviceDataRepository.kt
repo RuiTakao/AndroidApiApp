@@ -3,7 +3,7 @@ package com.takaobrog.androidapiapp.domain.repository
 import com.takaobrog.androidapiapp.domain.model.DeviceData
 import kotlinx.coroutines.flow.Flow
 
-interface DeviceRepository {
+interface DeviceDataRepository {
     suspend fun deviceId(): String
 
     suspend fun saveDeviceId(id: String)

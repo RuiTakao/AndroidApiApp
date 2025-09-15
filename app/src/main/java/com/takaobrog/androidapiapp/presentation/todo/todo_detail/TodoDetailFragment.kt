@@ -1,4 +1,4 @@
-package com.takaobrog.androidapiapp.presentation.todo_detail
+package com.takaobrog.androidapiapp.presentation.todo.todo_detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
