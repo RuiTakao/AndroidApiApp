@@ -26,6 +26,7 @@ class CreateDeviceIdActivity : AppCompatActivity() {
                 try {
                     val res = viewModel.createDeviceId()
                     if (res.isSuccess) {
+                        Log.d(TAG, "[onCreate] ${getString(R.string.create_device_id_success)}")
                         startActivity(
                             Intent(
                                 this@CreateDeviceIdActivity,
@@ -33,19 +34,21 @@ class CreateDeviceIdActivity : AppCompatActivity() {
                             )
                         )
                     } else {
+                        Log.e(TAG, "[onCreate] ${getString(R.string.create_device_id_dialog_network_error_title)}")
                         MaterialAlertDialogBuilder(this@CreateDeviceIdActivity)
-                            .setTitle(getString(R.string.create_device_data_dialog_network_error_title))
-                            .setMessage(getString(R.string.create_device_data_dialog_network_error_message))
+                            .setTitle(getString(R.string.create_device_id_dialog_network_error_title))
+                            .setMessage(getString(R.string.create_device_id_dialog_network_error_message))
                             .setPositiveButton(
-                                getString(R.string.create_device_data_dialog_network_error_ok),
+                                getString(R.string.create_device_id_dialog_network_error_ok),
                                 { dialog, which ->
                                     finish()
                                 }).show()
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "${getString(R.string.create_device_data_error_message)}$e")
+                    Log.e(TAG, "[onCreate] ${getString(R.string.create_device_id_error_message)}$e")
                 }
             } else {
+                Log.d(TAG, "[onCreate] ${getString(R.string.create_device_id_already_created)}")
                 startActivity(Intent(this@CreateDeviceIdActivity, TodoActivity::class.java))
             }
         }

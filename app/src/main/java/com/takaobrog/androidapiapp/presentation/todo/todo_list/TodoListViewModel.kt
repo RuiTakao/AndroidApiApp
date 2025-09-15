@@ -1,6 +1,5 @@
 package com.takaobrog.androidapiapp.presentation.todo.todo_list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,17 +25,10 @@ class TodoListViewModel @Inject constructor(
 
     fun fetchTodoList() {
         viewModelScope.launch {
-            try {
-                val result = withContext(Dispatchers.IO) { repository.getTodos() }
-                if (result.isSuccess) {
-                    val list = result.getOrNull().orEmpty()
-                    Log.d("success", list.toString())
-                    withContext(Dispatchers.Main) { _todoList.value = list }
-                } else {
-                    Log.e("error", "response error")
-                }
-            } catch (e: IOException) {
-                Log.e("error", "response error")
+            val result = withContext(Dispatchers.IO) { repository.getTodoList() }
+            if (result.isSuccess) {
+                val list = result.getOrNull().orEmpty()
+                withContext(Dispatchers.Main) { _todoList.value = list }
             }
         }
     }
