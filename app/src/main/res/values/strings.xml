@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">AndroidApiApp</string>
 
-    <!--  CreateDeviceData  -->
-    <string name="create_device_data_dialog_network_error_title">ネットワークエラー</string>
-    <string name="create_device_data_dialog_network_error_message">ネット環境の良い場所で起動してください</string>
-    <string name="create_device_data_dialog_network_error_ok">OK</string>
-    <string name="create_device_data_error_message">エラー：</string>
+    <!--  CreateDeviceId  -->
+    <string name="create_device_id_already_created">端末ID 作成済</string>
+    <string name="create_device_id_success">端末ID 作成 成功</string>
+    <string name="create_device_id_dialog_network_error_title">ネットワークエラー</string>
+    <string name="create_device_id_dialog_network_error_message">ネット環境の良い場所で起動してください</string>
+    <string name="create_device_id_dialog_network_error_ok">OK</string>
+    <string name="create_device_id_error_message">エラー：</string>
 
 <!--    <string name="app_name">Todo</string>-->
     <!-- TODO: Remove or change this placeholder text -->

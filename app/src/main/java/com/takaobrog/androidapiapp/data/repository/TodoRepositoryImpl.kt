@@ -1,34 +1,43 @@
 package com.takaobrog.androidapiapp.data.repository
 
+import android.util.Log
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
 import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.collections.orEmpty
+
+private val TAG = TodoRepositoryImpl::class.java.simpleName
 
 class TodoRepositoryImpl @Inject constructor(
     private val apiService: TodoApiService,
-    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
+    private val deviceDataRepository: DeviceDataRepository,
 ) : TodoRepository {
-    override suspend fun getTodos(): Result<List<Todo>> {
+    override suspend fun getTodoList(): Result<List<Todo>> {
         return try {
-            val res = apiService.getTodos()
+            val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
+                Log.d(TAG, "[getTodoList] success ${res.body().orEmpty()}")
                 Result.success(res.body().orEmpty())
             } else {
+                Log.e(TAG, "[getTodoList] failure")
                 Result.failure(HttpException(res))
             }
         } catch (e: IOException) {
+            Log.e(TAG, "[getTodoList] IOException : $e")
             Result.failure(e)
         } catch (e: Exception) {
+            Log.e(TAG, "[getTodoList] Exception : $e")
             Result.failure(e)
         }
     }
 
     override suspend fun getTodo(id: Int): Result<Todo?> {
         return try {
-            val res = apiService.getTodo(id, deviceDataStoreRepository.deviceId())
+            val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
                 Result.success(res.body())
             } else {
