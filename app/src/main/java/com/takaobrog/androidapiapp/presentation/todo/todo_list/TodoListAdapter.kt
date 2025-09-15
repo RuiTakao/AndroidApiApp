@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
 
 class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
@@ -15,7 +15,7 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
     }
 
     interface OnTodoCellCheckDoneListener {
-        fun onItemCheck(todo: Todo, isDone: Boolean)
+        fun onItemCheck(id: Int, isDone: Boolean)
     }
 
     private var listener: OnTodoCellClickListener? = null
@@ -47,7 +47,7 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
 
             isDone.setOnCheckedChangeListener { _, isChecked ->
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                    isDoneCheckListener?.onItemCheck(todo, isChecked)
+                    isDoneCheckListener?.onItemCheck(todo.id ?: 0, isChecked)
                 }
             }
 

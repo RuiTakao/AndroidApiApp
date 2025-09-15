@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.databinding.FragmentTodoListBinding
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,9 +56,8 @@ class TodoListFragment : Fragment() {
 
         adapter.setOnTodoCellCheckDoneListener(
             object : TodoListAdapter.OnTodoCellCheckDoneListener {
-                override fun onItemCheck(todo: Todo, isDone: Boolean) {
-                    println(todo)
-                    println(isDone)
+                override fun onItemCheck(id: Int, isDone: Boolean) {
+                    viewModel.updateDone(id, isDone)
                 }
             }
         )

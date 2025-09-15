@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialogEvent
@@ -44,20 +44,30 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
+    fun updateDone(id: Int, isDone: Boolean) {
+        viewModelScope.launch {
+            val res = repository.updateDone(id, isDone)
+            if (res.isFailure) {
+                onApiError("Todoチェックの更新エラー")
+            }
+        }
+    }
+
     private suspend fun fetchTodoList() {
         val result = withContext(Dispatchers.IO) { repository.getTodoList() }
         if (result.isSuccess) {
             val list = result.getOrNull().orEmpty()
             withContext(Dispatchers.Main) { _todoList.value = list }
         } else {
-            onApiError()
+            onApiError("Todo一覧、読み込みエラー")
         }
     }
 
-    private fun onApiError() {
+    private fun onApiError(msg: String) {
         _dialogEvent.value = TodoAlertDialogEvent(
             TodoAlertDialog(
-                title = "エラー",
+                title = msg,
+                // TODO 適切なメッセージに書き換え
                 message = "500エラー",
             )
         )
