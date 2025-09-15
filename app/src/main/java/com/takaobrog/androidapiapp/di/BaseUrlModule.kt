@@ -1,5 +1,6 @@
 package com.takaobrog.androidapiapp.di
 
+import com.takaobrog.androidapiapp.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,5 +13,5 @@ object BaseUrlModule {
 
     @Provides
     @Named("base_url")
-    fun provideBaseUrl() = "http://10.0.2.2:8765/"
+    fun provideBaseUrl() = BuildConfig.BASE_URL
 }
