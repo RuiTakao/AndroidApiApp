@@ -54,7 +54,10 @@ class TodoDetailViewModel @Inject constructor(
     }
 
     fun delete() {
-
+        viewModelScope.launch {
+            val res = repository.delete(todoId)
+            if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
+        }
     }
 
     private suspend fun fetchTodo(id: Int) {

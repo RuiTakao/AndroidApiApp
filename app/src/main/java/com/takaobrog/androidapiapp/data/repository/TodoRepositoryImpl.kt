@@ -86,6 +86,11 @@ class TodoRepositoryImpl @Inject constructor(
         if (!res.isSuccessful) throw HttpException(res)
     }
 
+    override suspend fun delete(id: Int): Result<Unit> = runCatching {
+        val res = apiService.delete(id)
+        if (!res.isSuccessful) throw HttpException(res)
+    }
+
     override suspend fun updateDone(id: Int, isDone: Boolean): Result<Unit> = runCatching {
         val updateTodoDoneRequest = UpdateTodoDoneRequest(
             done = isDone,

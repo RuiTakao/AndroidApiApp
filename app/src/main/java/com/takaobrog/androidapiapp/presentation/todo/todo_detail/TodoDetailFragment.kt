@@ -92,7 +92,7 @@ class TodoDetailFragment : Fragment() {
                 setOnShowListener {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set("refresh", true)
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set("reload", true)
                         findNavController().popBackStack()
                         dismiss()
                         Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
