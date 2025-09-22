@@ -26,6 +26,9 @@ class TodoDetailViewModel @Inject constructor(
     private val _todo = MutableLiveData<Todo?>()
     val todo: LiveData<Todo?> = _todo
 
+    private val _reloading = MutableLiveData(false)
+    val reloading: LiveData<Boolean> = _reloading
+
     init {
         load()
     }
