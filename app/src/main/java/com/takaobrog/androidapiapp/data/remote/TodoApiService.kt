@@ -26,7 +26,7 @@ interface TodoApiService {
     ): Response<Todo>
 
     @POST("todos/create")
-    suspend fun createTodo(
+    suspend fun create(
         @Body createTodoRequest: CreateTodoRequest,
     ): Response<Unit>
 
