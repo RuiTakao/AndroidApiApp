@@ -28,26 +28,38 @@ class TodoDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentTodoDetailBinding.inflate(inflater, container, false)
+        val datetime = binding.datetime
         val done = binding.isDone
         val title = binding.todoTitle
         val content = binding.todoContent
         val editBtn = binding.editBtn
         val deleteBtn = binding.deleteBtn
+        val swipe = binding.swipe
 
         viewModel.todo.observe(viewLifecycleOwner) {
             if (it?.done != null && it.done) {
                 done.isChecked = true
             }
+            datetime.text = it?.createdAt
             val dialogTitle = it?.title
             title.text = it?.title
             content.text = it?.content
             deleteBtn.setOnClickListener {
                 showDeleteDialog(dialogTitle)
             }
+            swipe.isRefreshing = false
         }
 
         editBtn.setOnClickListener {
             showEditDialog()
+        }
+
+        viewModel.reloading.observe(viewLifecycleOwner) {
+            swipe.isRefreshing = it
+        }
+
+        swipe.setOnRefreshListener {
+            viewModel.reloading()
         }
 
         return binding.root
