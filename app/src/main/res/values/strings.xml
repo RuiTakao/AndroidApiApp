@@ -9,9 +9,12 @@
     <string name="create_device_id_dialog_network_error_ok">OK</string>
     <string name="create_device_id_error_message">エラー：</string>
 
-<!--    <string name="app_name">Todo</string>-->
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello TodoList fragment</string>
+    <!--  一覧画面  -->
+    <string name="todo_list_recycleViw_description">登録画面へ遷移</string>
+    <string name="todo_list_floatingActionButton_description">Todo登録画面へ遷移</string>
+    <string name="todo_list_sample_datetime">2025/9/22</string>
+    <string name="todo_list_sample_title">タイトル</string>
+    <string name="todo_list_sample_content">テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</string>
 
     <!--  入力画面  -->
     <string name="todo_edit_title_label">タイトル</string>
