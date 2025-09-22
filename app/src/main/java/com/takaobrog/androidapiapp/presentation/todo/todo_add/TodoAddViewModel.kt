@@ -10,7 +10,7 @@ class TodoAddViewModel @Inject constructor(
     private val repository: TodoRepository,
 ) : ViewModel() {
     suspend fun createTodo(title: String, content: String): Result<Unit> {
-        return repository.createTodo(title = title, content = content)
+        return repository.create(title = title, content = content)
     }
 
     fun validMessage(title: String, content: String): String {

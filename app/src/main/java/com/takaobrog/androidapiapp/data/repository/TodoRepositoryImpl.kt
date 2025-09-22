@@ -55,7 +55,7 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun createTodo(title: String, content: String): Result<Unit> = runCatching {
+    override suspend fun create(title: String, content: String): Result<Unit> = runCatching {
         val now = time.now()
         val createdAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             .format(now.atOffset(ZoneOffset.UTC))
@@ -68,7 +68,7 @@ class TodoRepositoryImpl @Inject constructor(
             ),
             deviceId = deviceDataRepository.deviceId()
         )
-        val res = apiService.createTodo(createTodoRequest)
+        val res = apiService.create(createTodoRequest)
         if (!res.isSuccessful) throw HttpException(res)
     }
 
