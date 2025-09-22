@@ -3,16 +3,19 @@ package com.takaobrog.androidapiapp.data.repository
 import android.util.Log
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
 import com.takaobrog.androidapiapp.domain.model.todo.CreateTodoRequest
-import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import com.takaobrog.androidapiapp.time.TimeProvider
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.collections.orEmpty
 
@@ -23,12 +26,23 @@ class TodoRepositoryImpl @Inject constructor(
     private val deviceDataRepository: DeviceDataRepository,
     private val time: TimeProvider,
 ) : TodoRepository {
-    override suspend fun getTodoList(): Result<List<Todo>> {
+    override suspend fun getTodoList(): Result<List<TodoUiModel>> {
         return try {
             val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
                 Log.d(TAG, "[getTodoList] success ${res.body().orEmpty()}")
-                Result.success(res.body().orEmpty())
+                val list = res.body().orEmpty().mapNotNull { item ->
+                    item.id?.let { id ->
+                        TodoUiModel(
+                            id = id,
+                            title = item.title,
+                            content = item.content,
+                            done = item.done,
+                            datetime = item.createdAt.isoToDateYMD(),
+                        )
+                    }
+                }
+                Result.success(list)
             } else {
                 Log.e(TAG, "[getTodoList] failure")
                 Result.failure(HttpException(res))
@@ -42,11 +56,21 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTodo(id: Int): Result<Todo?> {
+    override suspend fun getTodo(id: Int): Result<TodoUiModel> {
         return try {
             val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
-                Result.success(res.body())
+                val getTodo = res.body()
+                getTodo?.id?.let { id ->
+                    val todoUiModel = TodoUiModel(
+                        id = id,
+                        title = getTodo.title,
+                        content = getTodo.content,
+                        done = getTodo.done,
+                        datetime = getTodo.createdAt.isoToDateYMD(),
+                    )
+                    Result.success(todoUiModel)
+                } ?: Result.failure(NullPointerException())
             } else {
                 Result.failure(HttpException(res))
             }
@@ -60,31 +84,30 @@ class TodoRepositoryImpl @Inject constructor(
         val createdAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             .format(now.atOffset(ZoneOffset.UTC))
 
-        val createTodoRequest = CreateTodoRequest(
-            todo = Todo(
-                title = title,
-                content = content,
-                createdAt = createdAt,
-            ),
+        val createGetTodoResponseRequest = CreateTodoRequest(
+            title = title,
+            content = content,
+            createdAt = createdAt,
             deviceId = deviceDataRepository.deviceId()
         )
-        val res = apiService.create(createTodoRequest)
+        val res = apiService.create(createGetTodoResponseRequest)
         if (!res.isSuccessful) throw HttpException(res)
     }
 
-    override suspend fun update(id: Int, title: String, content: String): Result<Unit> = runCatching {
-        val now = time.now()
-        val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-            .format(now.atOffset(ZoneOffset.UTC))
-        val updateTodoRequest = UpdateTodoRequest(
-            title = title,
-            content = content,
-            deviceId = deviceDataRepository.deviceId(),
-            updatedAt = updatedAt,
-        )
-        val res = apiService.update(id, updateTodoRequest)
-        if (!res.isSuccessful) throw HttpException(res)
-    }
+    override suspend fun update(id: Int, title: String, content: String): Result<Unit> =
+        runCatching {
+            val now = time.now()
+            val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                .format(now.atOffset(ZoneOffset.UTC))
+            val updateTodoRequest = UpdateTodoRequest(
+                title = title,
+                content = content,
+                deviceId = deviceDataRepository.deviceId(),
+                updatedAt = updatedAt,
+            )
+            val res = apiService.update(id, updateTodoRequest)
+            if (!res.isSuccessful) throw HttpException(res)
+        }
 
     override suspend fun delete(id: Int): Result<Unit> = runCatching {
         val res = apiService.delete(id)
@@ -98,5 +121,12 @@ class TodoRepositoryImpl @Inject constructor(
         )
         val res = apiService.updateDone(id, updateTodoDoneRequest)
         if (!res.isSuccessful) throw HttpException(res)
+    }
+
+    private fun String.isoToDateYMD(zoneId: ZoneId = ZoneId.systemDefault()): String {
+        val instant = Instant.parse(this)
+        val dateOnlyFormatter: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("yyyy/M/d", Locale.JAPAN)
+        return instant.atZone(zoneId).toLocalDate().format(dateOnlyFormatter)
     }
 }

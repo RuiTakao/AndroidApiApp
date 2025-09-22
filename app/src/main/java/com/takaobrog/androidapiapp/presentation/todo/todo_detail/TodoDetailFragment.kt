@@ -37,13 +37,11 @@ class TodoDetailFragment : Fragment() {
         val swipe = binding.swipe
 
         viewModel.todo.observe(viewLifecycleOwner) {
-            if (it?.done != null && it.done) {
-                done.isChecked = true
-            }
-            datetime.text = it?.createdAt
-            val dialogTitle = it?.title
-            title.text = it?.title
-            content.text = it?.content
+            done.isChecked = it.done
+            datetime.text = it.datetime
+            title.text = it.title
+            content.text = it.content
+            val dialogTitle = it.title
             deleteBtn.setOnClickListener {
                 showDeleteDialog(dialogTitle)
             }
@@ -70,8 +68,8 @@ class TodoDetailFragment : Fragment() {
         val title = dialogBinding.editTitle
         val content = dialogBinding.editContent
         viewModel.todo.observe(viewLifecycleOwner) {
-            title.setText(it?.title)
-            content.setText(it?.content)
+            title.setText(it.title)
+            content.setText(it.content)
         }
         dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("編集")
@@ -104,11 +102,14 @@ class TodoDetailFragment : Fragment() {
                 setOnShowListener {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set("reload", true)
+                        viewModel.delete()
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                            "reload",
+                            true
+                        )
                         findNavController().popBackStack()
                         dismiss()
                         Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
-                        viewModel.delete()
                     }
                 }
                 show()
