@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +23,8 @@ class TodoDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val todoId: Int = checkNotNull(savedStateHandle["todoId"])
 
-    private val _Get_todoResponse = MutableLiveData<GetTodoResponse?>()
-    val getTodoResponse: LiveData<GetTodoResponse?> = _Get_todoResponse
+    private val _todo = MutableLiveData<TodoUiModel>()
+    val todo: LiveData<TodoUiModel> = _todo
 
     private val _reloading = MutableLiveData(false)
     val reloading: LiveData<Boolean> = _reloading
@@ -67,7 +67,9 @@ class TodoDetailViewModel @Inject constructor(
         val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
         if (result.isSuccess) {
             val data = result.getOrNull()
-            withContext(Dispatchers.Main) { _Get_todoResponse.value = data }
+            data?.let {
+                withContext(Dispatchers.Main) { _todo.value = it }
+            }
         } else {
             Log.e("TodoDetailViewModel", "Todo get failure")
         }

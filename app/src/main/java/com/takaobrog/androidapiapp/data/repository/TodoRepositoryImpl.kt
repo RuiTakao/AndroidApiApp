@@ -3,7 +3,6 @@ package com.takaobrog.androidapiapp.data.repository
 import android.util.Log
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
 import com.takaobrog.androidapiapp.domain.model.todo.CreateTodoRequest
-import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
@@ -57,11 +56,21 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTodo(id: Int): Result<GetTodoResponse?> {
+    override suspend fun getTodo(id: Int): Result<TodoUiModel> {
         return try {
             val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
-                Result.success(res.body())
+                val getTodo = res.body()
+                getTodo?.id?.let { id ->
+                    val todoUiModel = TodoUiModel(
+                        id = id,
+                        title = getTodo.title,
+                        content = getTodo.content,
+                        done = getTodo.done,
+                        datetime = getTodo.createdAt.isoToDateYMD(),
+                    )
+                    Result.success(todoUiModel)
+                } ?: Result.failure(NullPointerException())
             } else {
                 Result.failure(HttpException(res))
             }

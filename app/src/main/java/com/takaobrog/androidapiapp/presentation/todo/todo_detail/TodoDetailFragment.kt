@@ -36,14 +36,12 @@ class TodoDetailFragment : Fragment() {
         val deleteBtn = binding.deleteBtn
         val swipe = binding.swipe
 
-        viewModel.getTodoResponse.observe(viewLifecycleOwner) {
-            if (it?.done != null && it.done) {
-                done.isChecked = true
-            }
-            datetime.text = it?.createdAt
-            val dialogTitle = it?.title
-            title.text = it?.title
-            content.text = it?.content
+        viewModel.todo.observe(viewLifecycleOwner) {
+            done.isChecked = it.done
+            datetime.text = it.datetime
+            title.text = it.title
+            content.text = it.content
+            val dialogTitle = it.title
             deleteBtn.setOnClickListener {
                 showDeleteDialog(dialogTitle)
             }
@@ -69,9 +67,9 @@ class TodoDetailFragment : Fragment() {
         val dialogBinding = DialogTodoEditBinding.inflate(layoutInflater, null, false)
         val title = dialogBinding.editTitle
         val content = dialogBinding.editContent
-        viewModel.getTodoResponse.observe(viewLifecycleOwner) {
-            title.setText(it?.title)
-            content.setText(it?.content)
+        viewModel.todo.observe(viewLifecycleOwner) {
+            title.setText(it.title)
+            content.setText(it.content)
         }
         dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("編集")
@@ -104,11 +102,14 @@ class TodoDetailFragment : Fragment() {
                 setOnShowListener {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set("reload", true)
+                        viewModel.delete()
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                            "reload",
+                            true
+                        )
                         findNavController().popBackStack()
                         dismiss()
                         Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
-                        viewModel.delete()
                     }
                 }
                 show()
