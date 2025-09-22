@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.data.repository.DeviceDataRepositoryImpl
-import com.takaobrog.androidapiapp.domain.model.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +14,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+private val TAG = TodoDetailViewModel::class.simpleName
+
 @HiltViewModel
 class TodoDetailViewModel @Inject constructor(
     private val repository: TodoRepository,
-    private val deviceDataStoreRepository: DeviceDataRepositoryImpl,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val todoId: Int = checkNotNull(savedStateHandle["todoId"])
@@ -26,20 +26,50 @@ class TodoDetailViewModel @Inject constructor(
     private val _todo = MutableLiveData<Todo?>()
     val todo: LiveData<Todo?> = _todo
 
+    private val _reloading = MutableLiveData(false)
+    val reloading: LiveData<Boolean> = _reloading
+
     init {
-        fetchTodo(todoId)
+        load()
     }
 
-    fun fetchTodo(id: Int) {
+    fun load() {
         viewModelScope.launch {
-            println("detail ${deviceDataStoreRepository.deviceId()}")
-            val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
-            if (result.isSuccess) {
-                val data = result.getOrNull()
-                withContext(Dispatchers.Main) { _todo.value = data }
+            fetchTodo(todoId)
+        }
+    }
+
+    fun reloading() {
+        viewModelScope.launch {
+            fetchTodo(todoId)
+        }
+    }
+
+    fun update(title: String, content: String) {
+        viewModelScope.launch {
+            val res = repository.update(todoId, title, content)
+            if (res.isSuccess) {
+                fetchTodo(todoId)
             } else {
-                Log.e("TodoDetailViewModel", "Todo get failure")
+                Log.e(TAG, "[update] update todo failure")
             }
+        }
+    }
+
+    fun delete() {
+        viewModelScope.launch {
+            val res = repository.delete(todoId)
+            if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
+        }
+    }
+
+    private suspend fun fetchTodo(id: Int) {
+        val result = withContext(Dispatchers.IO) { repository.getTodo(id) }
+        if (result.isSuccess) {
+            val data = result.getOrNull()
+            withContext(Dispatchers.Main) { _todo.value = data }
+        } else {
+            Log.e("TodoDetailViewModel", "Todo get failure")
         }
     }
 }

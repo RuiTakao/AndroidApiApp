@@ -42,6 +42,10 @@ class TodoActivity : AppCompatActivity() {
             (supportFragmentManager.findFragmentById(R.id.nav_host_todo_fragment_content_main) as NavHostFragment)
                 .navController
 
+        navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.set("reload", true)
+
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
