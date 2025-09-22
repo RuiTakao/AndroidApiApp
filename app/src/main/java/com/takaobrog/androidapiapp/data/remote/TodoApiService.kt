@@ -1,7 +1,7 @@
 package com.takaobrog.androidapiapp.data.remote
 
 import com.takaobrog.androidapiapp.domain.model.todo.CreateTodoRequest
-import com.takaobrog.androidapiapp.domain.model.todo.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import retrofit2.Response
@@ -17,13 +17,13 @@ interface TodoApiService {
     @GET("todos/todo_list")
     suspend fun getTodoList(
         @Query("deviceId") deviceId: String,
-    ): Response<List<Todo>>
+    ): Response<List<GetTodoResponse>>
 
     @GET("todos/todo/{todoId}")
     suspend fun getTodo(
         @Path("todoId") id: Int,
         @Query("deviceId") deviceId: String,
-    ): Response<Todo>
+    ): Response<GetTodoResponse>
 
     @POST("todos/create")
     suspend fun create(
