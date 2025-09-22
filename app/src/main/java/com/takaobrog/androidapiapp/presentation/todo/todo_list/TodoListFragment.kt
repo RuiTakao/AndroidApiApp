@@ -68,7 +68,7 @@ class TodoListFragment : Fragment() {
             nav.navigate(R.id.action_todoListFragment_to_todoAddFragment)
         }
 
-        viewModel.todo.observe(viewLifecycleOwner) {
+        viewModel.todoList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             swipe.isRefreshing = false
         }

@@ -18,8 +18,8 @@ import javax.inject.Inject
 class TodoListViewModel @Inject constructor(
     private val repository: TodoRepository,
 ) : ViewModel() {
-    private val _todo = MutableLiveData<List<TodoUiModel>>()
-    val todo: LiveData<List<TodoUiModel>> = _todo
+    private val _todoList = MutableLiveData<List<TodoUiModel>>()
+    val todoList: LiveData<List<TodoUiModel>> = _todoList
 
     private val _reloading = MutableLiveData(false)
     val reloading: LiveData<Boolean> = _reloading
@@ -57,7 +57,7 @@ class TodoListViewModel @Inject constructor(
         val result = withContext(Dispatchers.IO) { repository.getTodoList() }
         if (result.isSuccess) {
             val list = result.getOrNull().orEmpty()
-            withContext(Dispatchers.Main) { _todo.value = list }
+            withContext(Dispatchers.Main) { _todoList.value = list }
         } else {
             onApiError("Todo一覧、読み込みエラー")
         }
