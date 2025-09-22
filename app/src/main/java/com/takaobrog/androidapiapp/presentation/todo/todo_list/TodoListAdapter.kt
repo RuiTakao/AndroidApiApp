@@ -2,9 +2,11 @@ package com.takaobrog.androidapiapp.presentation.todo.todo_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.takaobrog.androidapiapp.R
 import com.takaobrog.androidapiapp.domain.model.todo.Todo
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
 
@@ -41,9 +43,12 @@ class TodoListAdapter : ListAdapter<Todo, TodoListAdapter.VH>(DIFF) {
 
         with(holder.binding) {
             todoTitle.text = todo.title
-            todoContent.text = todo.content
             isDone.isChecked = todo.done
             datetime.text = todo.createdAt
+
+            val colorRes = if (position % 2 == 0) R.color.row_even else R.color.row_odd
+            val colorInt = ContextCompat.getColor(root.context, colorRes)
+            root.setBackgroundColor(colorInt)
 
             isDone.setOnCheckedChangeListener { _, isChecked ->
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
