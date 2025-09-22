@@ -36,7 +36,7 @@ class TodoDetailFragment : Fragment() {
         val deleteBtn = binding.deleteBtn
         val swipe = binding.swipe
 
-        viewModel.todo.observe(viewLifecycleOwner) {
+        viewModel.getTodoResponse.observe(viewLifecycleOwner) {
             if (it?.done != null && it.done) {
                 done.isChecked = true
             }
@@ -69,7 +69,7 @@ class TodoDetailFragment : Fragment() {
         val dialogBinding = DialogTodoEditBinding.inflate(layoutInflater, null, false)
         val title = dialogBinding.editTitle
         val content = dialogBinding.editContent
-        viewModel.todo.observe(viewLifecycleOwner) {
+        viewModel.getTodoResponse.observe(viewLifecycleOwner) {
             title.setText(it?.title)
             content.setText(it?.content)
         }

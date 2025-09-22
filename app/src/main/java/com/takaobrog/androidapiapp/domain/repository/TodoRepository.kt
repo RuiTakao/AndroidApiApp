@@ -1,11 +1,11 @@
 package com.takaobrog.androidapiapp.domain.repository
 
-import com.takaobrog.androidapiapp.domain.model.todo.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 
 interface TodoRepository {
-    suspend fun getTodoList(): Result<List<Todo>>
+    suspend fun getTodoList(): Result<List<GetTodoResponse>>
 
-    suspend fun getTodo(id: Int): Result<Todo?>
+    suspend fun getTodo(id: Int): Result<GetTodoResponse?>
 
     suspend fun create(title: String, content: String): Result<Unit>
 

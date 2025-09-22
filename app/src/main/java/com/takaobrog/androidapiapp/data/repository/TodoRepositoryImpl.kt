@@ -3,7 +3,7 @@ package com.takaobrog.androidapiapp.data.repository
 import android.util.Log
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
 import com.takaobrog.androidapiapp.domain.model.todo.CreateTodoRequest
-import com.takaobrog.androidapiapp.domain.model.todo.Todo
+import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
@@ -23,7 +23,7 @@ class TodoRepositoryImpl @Inject constructor(
     private val deviceDataRepository: DeviceDataRepository,
     private val time: TimeProvider,
 ) : TodoRepository {
-    override suspend fun getTodoList(): Result<List<Todo>> {
+    override suspend fun getTodoList(): Result<List<GetTodoResponse>> {
         return try {
             val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
@@ -42,7 +42,7 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getTodo(id: Int): Result<Todo?> {
+    override suspend fun getTodo(id: Int): Result<GetTodoResponse?> {
         return try {
             val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
@@ -60,31 +60,30 @@ class TodoRepositoryImpl @Inject constructor(
         val createdAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             .format(now.atOffset(ZoneOffset.UTC))
 
-        val createTodoRequest = CreateTodoRequest(
-            todo = Todo(
-                title = title,
-                content = content,
-                createdAt = createdAt,
-            ),
+        val createGetTodoResponseRequest = CreateTodoRequest(
+            title = title,
+            content = content,
+            createdAt = createdAt,
             deviceId = deviceDataRepository.deviceId()
         )
-        val res = apiService.create(createTodoRequest)
+        val res = apiService.create(createGetTodoResponseRequest)
         if (!res.isSuccessful) throw HttpException(res)
     }
 
-    override suspend fun update(id: Int, title: String, content: String): Result<Unit> = runCatching {
-        val now = time.now()
-        val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-            .format(now.atOffset(ZoneOffset.UTC))
-        val updateTodoRequest = UpdateTodoRequest(
-            title = title,
-            content = content,
-            deviceId = deviceDataRepository.deviceId(),
-            updatedAt = updatedAt,
-        )
-        val res = apiService.update(id, updateTodoRequest)
-        if (!res.isSuccessful) throw HttpException(res)
-    }
+    override suspend fun update(id: Int, title: String, content: String): Result<Unit> =
+        runCatching {
+            val now = time.now()
+            val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                .format(now.atOffset(ZoneOffset.UTC))
+            val updateTodoRequest = UpdateTodoRequest(
+                title = title,
+                content = content,
+                deviceId = deviceDataRepository.deviceId(),
+                updatedAt = updatedAt,
+            )
+            val res = apiService.update(id, updateTodoRequest)
+            if (!res.isSuccessful) throw HttpException(res)
+        }
 
     override suspend fun delete(id: Int): Result<Unit> = runCatching {
         val res = apiService.delete(id)
