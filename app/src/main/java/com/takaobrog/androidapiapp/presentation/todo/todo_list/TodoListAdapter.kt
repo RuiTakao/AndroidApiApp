@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.takaobrog.androidapiapp.R
-import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 
-class TodoListAdapter : ListAdapter<GetTodoResponse, TodoListAdapter.VH>(DIFF) {
+class TodoListAdapter : ListAdapter<TodoUiModel, TodoListAdapter.VH>(DIFF) {
 
     interface OnTodoCellClickListener {
-        fun onItemClick(getTodoResponse: GetTodoResponse)
+        fun onItemClick(todo: TodoUiModel)
     }
 
     interface OnTodoCellCheckDoneListener {
@@ -44,7 +44,7 @@ class TodoListAdapter : ListAdapter<GetTodoResponse, TodoListAdapter.VH>(DIFF) {
         with(holder.binding) {
             todoTitle.text = todo.title
             isDone.isChecked = todo.done
-            datetime.text = todo.createdAt
+            datetime.text = todo.datetime
 
             val colorRes = if (position % 2 == 0) R.color.row_even else R.color.row_odd
             val colorInt = ContextCompat.getColor(root.context, colorRes)
@@ -52,7 +52,7 @@ class TodoListAdapter : ListAdapter<GetTodoResponse, TodoListAdapter.VH>(DIFF) {
 
             isDone.setOnCheckedChangeListener { _, isChecked ->
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                    isDoneCheckListener?.onItemCheck(todo.id ?: 0, isChecked)
+                    isDoneCheckListener?.onItemCheck(todo.id, isChecked)
                 }
             }
 
@@ -65,9 +65,9 @@ class TodoListAdapter : ListAdapter<GetTodoResponse, TodoListAdapter.VH>(DIFF) {
     }
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<GetTodoResponse>() {
-            override fun areItemsTheSame(oldItem: GetTodoResponse, newItem: GetTodoResponse) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: GetTodoResponse, newItem: GetTodoResponse) = oldItem == newItem
+        private val DIFF = object : DiffUtil.ItemCallback<TodoUiModel>() {
+            override fun areItemsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel) = oldItem == newItem
         }
     }
 }

@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialogEvent
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,8 +18,8 @@ import javax.inject.Inject
 class TodoListViewModel @Inject constructor(
     private val repository: TodoRepository,
 ) : ViewModel() {
-    private val _Get_todoResponseList = MutableLiveData<List<GetTodoResponse>>()
-    val getTodoResponseList: LiveData<List<GetTodoResponse>> = _Get_todoResponseList
+    private val _todo = MutableLiveData<List<TodoUiModel>>()
+    val todo: LiveData<List<TodoUiModel>> = _todo
 
     private val _reloading = MutableLiveData(false)
     val reloading: LiveData<Boolean> = _reloading
@@ -57,7 +57,7 @@ class TodoListViewModel @Inject constructor(
         val result = withContext(Dispatchers.IO) { repository.getTodoList() }
         if (result.isSuccess) {
             val list = result.getOrNull().orEmpty()
-            withContext(Dispatchers.Main) { _Get_todoResponseList.value = list }
+            withContext(Dispatchers.Main) { _todo.value = list }
         } else {
             onApiError("Todo一覧、読み込みエラー")
         }

@@ -8,11 +8,15 @@ import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import com.takaobrog.androidapiapp.time.TimeProvider
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.collections.orEmpty
 
@@ -23,12 +27,23 @@ class TodoRepositoryImpl @Inject constructor(
     private val deviceDataRepository: DeviceDataRepository,
     private val time: TimeProvider,
 ) : TodoRepository {
-    override suspend fun getTodoList(): Result<List<GetTodoResponse>> {
+    override suspend fun getTodoList(): Result<List<TodoUiModel>> {
         return try {
             val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
                 Log.d(TAG, "[getTodoList] success ${res.body().orEmpty()}")
-                Result.success(res.body().orEmpty())
+                val list = res.body().orEmpty().mapNotNull { item ->
+                    item.id?.let { id ->
+                        TodoUiModel(
+                            id = id,
+                            title = item.title,
+                            content = item.content,
+                            done = item.done,
+                            datetime = item.createdAt.isoToDateYMD(),
+                        )
+                    }
+                }
+                Result.success(list)
             } else {
                 Log.e(TAG, "[getTodoList] failure")
                 Result.failure(HttpException(res))
@@ -97,5 +112,12 @@ class TodoRepositoryImpl @Inject constructor(
         )
         val res = apiService.updateDone(id, updateTodoDoneRequest)
         if (!res.isSuccessful) throw HttpException(res)
+    }
+
+    private fun String.isoToDateYMD(zoneId: ZoneId = ZoneId.systemDefault()): String {
+        val instant = Instant.parse(this)
+        val dateOnlyFormatter: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("yyyy/M/d", Locale.JAPAN)
+        return instant.atZone(zoneId).toLocalDate().format(dateOnlyFormatter)
     }
 }

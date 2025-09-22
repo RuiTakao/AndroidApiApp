@@ -10,9 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
-import com.takaobrog.androidapiapp.domain.model.todo.GetTodoResponse
 import com.takaobrog.androidapiapp.databinding.FragmentTodoListBinding
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
+import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,10 +45,9 @@ class TodoListFragment : Fragment() {
 
         adapter.setOnTodoCellClickListener(
             object : TodoListAdapter.OnTodoCellClickListener {
-                override fun onItemClick(getTodoResponse: GetTodoResponse) {
-                    val id = getTodoResponse.id ?: 0
+                override fun onItemClick(todo: TodoUiModel) {
                     val action =
-                        TodoListFragmentDirections.actionTodoListFragmentToTodoDetailFragment(id)
+                        TodoListFragmentDirections.actionTodoListFragmentToTodoDetailFragment(todo.id)
                     findNavController().navigate(action)
                 }
             }
@@ -69,7 +68,7 @@ class TodoListFragment : Fragment() {
             nav.navigate(R.id.action_todoListFragment_to_todoAddFragment)
         }
 
-        viewModel.getTodoResponseList.observe(viewLifecycleOwner) {
+        viewModel.todo.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             swipe.isRefreshing = false
         }
