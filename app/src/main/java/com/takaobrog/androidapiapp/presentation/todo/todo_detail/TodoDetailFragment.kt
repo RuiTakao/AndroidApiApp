@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.databinding.DialogTodoEditBinding
 import com.takaobrog.androidapiapp.databinding.FragmentTodoDetailBinding
+import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +36,9 @@ class TodoDetailFragment : Fragment() {
         val editBtn = binding.editBtn
         val deleteBtn = binding.deleteBtn
         val swipe = binding.swipe
+        title.text = ""
+        content.text = ""
+        done.isChecked = false
 
         viewModel.todo.observe(viewLifecycleOwner) {
             done.isChecked = it.done
@@ -54,6 +58,11 @@ class TodoDetailFragment : Fragment() {
 
         viewModel.reloading.observe(viewLifecycleOwner) {
             swipe.isRefreshing = it
+        }
+
+        viewModel.dialogEvent.observe(viewLifecycleOwner) {
+            val dialog = it.getContentIfNotHandled() ?: return@observe
+            showErrorDialog(dialog)
         }
 
         swipe.setOnRefreshListener {
@@ -103,10 +112,9 @@ class TodoDetailFragment : Fragment() {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
                         viewModel.delete()
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                            "reload",
-                            true
-                        )
+                        findNavController().previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("reload", true)
                         findNavController().popBackStack()
                         dismiss()
                         Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
@@ -115,6 +123,17 @@ class TodoDetailFragment : Fragment() {
                 show()
             }
     }
+
+    private fun showErrorDialog(dialog: TodoAlertDialog) =
+        MaterialAlertDialogBuilder(requireContext()).setTitle(dialog.title)
+            .setMessage(dialog.message)
+            .setPositiveButton(dialog.positiveText) { _, _ ->
+                findNavController().previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("reload", true)
+                findNavController().popBackStack()
+            }
+            .show()
 
     override fun onDestroyView() {
         dialog = null
