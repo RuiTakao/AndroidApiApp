@@ -69,7 +69,11 @@ class TodoListFragment : Fragment() {
         }
 
         viewModel.todoList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it) {
+                todoListRecyclerView.post {
+                    todoListRecyclerView.smoothScrollToPosition(0)
+                }
+            }
             swipe.isRefreshing = false
         }
 
