@@ -86,7 +86,9 @@ class TodoRepositoryImpl @Inject constructor(
 
         val createGetTodoResponseRequest = CreateTodoRequest(
             title = title,
-            memo = memo,
+            memo = if (memo.isEmpty()) {
+                "..."
+            } else memo,
             createdAt = createdAt,
             deviceId = deviceDataRepository.deviceId()
         )

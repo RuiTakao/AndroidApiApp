@@ -16,25 +16,22 @@ class TodoAddViewModel @Inject constructor(
     fun validMessage(title: String, memo: String): String {
         var message = ""
         var titleMessage = ""
-        var contentMessage = ""
+        var memoMessage = ""
         if (title.isEmpty()) {
             titleMessage = "タイトルを入力してください"
         }
         if (title.length >= 10) {
             titleMessage = "タイトルは10文字以下で入力してください"
         }
-        if (memo.isEmpty()) {
-            contentMessage = "内容を入力してください"
-        }
         if (memo.length >= 140) {
-            contentMessage = "内容は140文字以下で入力してください"
+            memoMessage = "内容は140文字以下で入力してください"
         }
-        if (!titleMessage.isEmpty() || !contentMessage.isEmpty()) {
+        if (!titleMessage.isEmpty()) {
             message = titleMessage
             if (!message.isEmpty()) {
                 message += "\n"
             }
-            message += contentMessage
+            message += memoMessage
         }
         return message
     }
