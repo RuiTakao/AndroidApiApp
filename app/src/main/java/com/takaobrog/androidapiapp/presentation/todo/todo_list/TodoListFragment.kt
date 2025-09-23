@@ -92,9 +92,7 @@ class TodoListFragment : Fragment() {
     private fun showDialog(dialog: TodoAlertDialog) =
         MaterialAlertDialogBuilder(requireContext()).setTitle(dialog.title)
             .setMessage(dialog.message)
-            .setPositiveButton(dialog.positiveText) { _, _ ->
-                viewModel.reloading()
-            }
+            .setPositiveButton(dialog.positiveText) { _, _ -> }
             .show()
 
     override fun onDestroy() {
