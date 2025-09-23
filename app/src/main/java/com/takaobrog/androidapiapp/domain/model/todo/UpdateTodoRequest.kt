@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class UpdateTodoRequest(
     val title: String,
-    val content: String,
+    val memo: String,
     val deviceId: String,
     val updatedAt: String,
 )

@@ -36,7 +36,7 @@ class TodoRepositoryImpl @Inject constructor(
                         TodoUiModel(
                             id = id,
                             title = item.title,
-                            content = item.content,
+                            memo = item.memo,
                             done = item.done,
                             datetime = item.createdAt.isoToDateYMD(),
                         )
@@ -65,7 +65,7 @@ class TodoRepositoryImpl @Inject constructor(
                     val todoUiModel = TodoUiModel(
                         id = id,
                         title = getTodo.title,
-                        content = getTodo.content,
+                        memo = getTodo.memo,
                         done = getTodo.done,
                         datetime = getTodo.createdAt.isoToDateYMD(),
                     )
@@ -79,14 +79,14 @@ class TodoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun create(title: String, content: String): Result<Unit> = runCatching {
+    override suspend fun create(title: String, memo: String): Result<Unit> = runCatching {
         val now = time.now()
         val createdAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
             .format(now.atOffset(ZoneOffset.UTC))
 
         val createGetTodoResponseRequest = CreateTodoRequest(
             title = title,
-            content = content,
+            memo = memo,
             createdAt = createdAt,
             deviceId = deviceDataRepository.deviceId()
         )
@@ -94,14 +94,14 @@ class TodoRepositoryImpl @Inject constructor(
         if (!res.isSuccessful) throw HttpException(res)
     }
 
-    override suspend fun update(id: Int, title: String, content: String): Result<Unit> =
+    override suspend fun update(id: Int, title: String, memo: String): Result<Unit> =
         runCatching {
             val now = time.now()
             val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
                 .format(now.atOffset(ZoneOffset.UTC))
             val updateTodoRequest = UpdateTodoRequest(
                 title = title,
-                content = content,
+                memo = memo,
                 deviceId = deviceDataRepository.deviceId(),
                 updatedAt = updatedAt,
             )

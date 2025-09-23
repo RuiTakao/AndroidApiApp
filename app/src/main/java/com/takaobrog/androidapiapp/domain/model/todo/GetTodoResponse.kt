@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 data class GetTodoResponse(
     val id: Int? = null,
     val title: String,
-    val content: String,
+    val memo: String,
     val done: Boolean = false,
     val createdAt: String,
 )

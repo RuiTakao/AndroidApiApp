@@ -31,15 +31,15 @@ class TodoAddFragment : Fragment() {
     ): View? {
         _binding = FragmentTodoAddBinding.inflate(inflater, container, false)
         val editTextTitle = binding.todoInputTitle
-        val editTextContent = binding.todoInputContent
+        val editTextMemo = binding.todoInputMemo
         val createBtn = binding.todoCreateBtn
         val validMessage = binding.validMessage
 
         createBtn.setOnClickListener {
             val title = editTextTitle.text.toString()
-            val content = editTextContent.text.toString()
-            if (!viewModel.validMessage(title = title, content = content).isEmpty()) {
-                validMessage.text = viewModel.validMessage(title = title, content = content)
+            val memo = editTextMemo.text.toString()
+            if (!viewModel.validMessage(title = title, memo = memo).isEmpty()) {
+                validMessage.text = viewModel.validMessage(title = title, memo = memo)
                 validMessage.visibility = View.VISIBLE
                 return@setOnClickListener
             }
@@ -48,7 +48,7 @@ class TodoAddFragment : Fragment() {
                 val res =
                     viewModel.createTodo(
                         title = title,
-                        content = content,
+                        memo = memo,
                     )
                 res.onSuccess {
                     Log.d("TodoAddFragment", "todo insert success")
