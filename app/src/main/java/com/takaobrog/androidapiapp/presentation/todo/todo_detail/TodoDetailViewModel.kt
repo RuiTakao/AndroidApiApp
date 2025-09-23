@@ -61,6 +61,15 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
+    fun updateDone(isDone: Boolean) {
+        viewModelScope.launch {
+            val res = repository.updateDone(todoId, isDone)
+            if (res.isFailure) {
+                onApiError("Todoチェックの更新エラー")
+            }
+        }
+    }
+
     fun delete() {
         viewModelScope.launch {
             val res = repository.delete(todoId)

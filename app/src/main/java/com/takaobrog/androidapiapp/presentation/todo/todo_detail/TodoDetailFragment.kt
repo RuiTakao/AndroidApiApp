@@ -38,7 +38,6 @@ class TodoDetailFragment : Fragment() {
         val swipe = binding.swipe
         title.text = ""
         content.text = ""
-        done.isChecked = false
 
         viewModel.todo.observe(viewLifecycleOwner) {
             done.isChecked = it.done
@@ -54,6 +53,11 @@ class TodoDetailFragment : Fragment() {
 
         editBtn.setOnClickListener {
             showEditDialog()
+        }
+
+        done.setOnCheckedChangeListener(null)
+        done.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateDone(isDone = isChecked)
         }
 
         viewModel.reloading.observe(viewLifecycleOwner) {
