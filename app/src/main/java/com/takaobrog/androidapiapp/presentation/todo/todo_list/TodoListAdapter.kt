@@ -43,13 +43,14 @@ class TodoListAdapter : ListAdapter<TodoUiModel, TodoListAdapter.VH>(DIFF) {
 
         with(holder.binding) {
             todoTitle.text = todo.title
-            isDone.isChecked = todo.done
             datetime.text = todo.datetime
 
             val colorRes = if (position % 2 == 0) R.color.row_even else R.color.row_odd
             val colorInt = ContextCompat.getColor(root.context, colorRes)
             root.setBackgroundColor(colorInt)
 
+            isDone.setOnCheckedChangeListener(null)
+            isDone.isChecked = todo.done
             isDone.setOnCheckedChangeListener { _, isChecked ->
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                     isDoneCheckListener?.onItemCheck(todo.id, isChecked)
