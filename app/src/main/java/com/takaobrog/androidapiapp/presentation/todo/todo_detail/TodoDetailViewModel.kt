@@ -50,9 +50,9 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    fun update(title: String, content: String) {
+    fun update(title: String, memo: String) {
         viewModelScope.launch {
-            val res = repository.update(todoId, title, content)
+            val res = repository.update(todoId, title, memo)
             if (res.isSuccess) {
                 fetchTodo(todoId)
             } else {

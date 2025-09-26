@@ -7,9 +7,9 @@ interface TodoRepository {
 
     suspend fun getTodo(id: Int): Result<TodoUiModel>
 
-    suspend fun create(title: String, content: String): Result<Unit>
+    suspend fun create(title: String, memo: String): Result<Unit>
 
-    suspend fun update(id: Int, title: String, content: String): Result<Unit>
+    suspend fun update(id: Int, title: String, memo: String): Result<Unit>
 
     suspend fun delete(id: Int): Result<Unit>
 
