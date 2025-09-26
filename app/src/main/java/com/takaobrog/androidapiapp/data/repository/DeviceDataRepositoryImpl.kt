@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.takaobrog.androidapiapp.data.remote.DeviceDataApiService
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.model.PostDeviceDataRequest
+import com.takaobrog.androidapiapp.util.log.httpLog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -33,6 +34,7 @@ class DeviceDataRepositoryImpl @Inject constructor(
         Log.d(TAG, "[postDeviceData] post deviceId : $uuid post deviceName : $deviceName")
         if (res.isSuccessful) {
             dataStore.edit { it[DEVICE_ID] = uuid }
+            httpLog(request = res.raw().request())
             Log.d(TAG, "[postDeviceData] save local deviceId : ${deviceId()}")
         } else throw HttpException(res)
     }

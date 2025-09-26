@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.databinding.DialogTodoEditBinding
 import com.takaobrog.androidapiapp.databinding.FragmentTodoDetailBinding
+import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TodoDetailFragment : Fragment() {
@@ -35,6 +38,8 @@ class TodoDetailFragment : Fragment() {
         val editBtn = binding.editBtn
         val deleteBtn = binding.deleteBtn
         val swipe = binding.swipe
+        title.text = ""
+        content.text = ""
 
         viewModel.todo.observe(viewLifecycleOwner) {
             done.isChecked = it.done
@@ -52,8 +57,18 @@ class TodoDetailFragment : Fragment() {
             showEditDialog()
         }
 
+        done.setOnCheckedChangeListener(null)
+        done.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateDone(isDone = isChecked)
+        }
+
         viewModel.reloading.observe(viewLifecycleOwner) {
             swipe.isRefreshing = it
+        }
+
+        viewModel.dialogEvent.observe(viewLifecycleOwner) {
+            val dialog = it.getContentIfNotHandled() ?: return@observe
+            showErrorDialog(dialog)
         }
 
         swipe.setOnRefreshListener {
@@ -102,19 +117,32 @@ class TodoDetailFragment : Fragment() {
                 setOnShowListener {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
-                        viewModel.delete()
-                        findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                            "reload",
-                            true
-                        )
-                        findNavController().popBackStack()
-                        dismiss()
-                        Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            viewModel.delete()
+                            findNavController().previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("reload", true)
+                            findNavController().popBackStack()
+                            dismiss()
+                            Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 }
                 show()
             }
     }
+
+    private fun showErrorDialog(dialog: TodoAlertDialog) =
+        MaterialAlertDialogBuilder(requireContext()).setTitle(dialog.title)
+            .setMessage(dialog.message)
+            .setPositiveButton(dialog.positiveText) { _, _ ->
+                findNavController().previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("reload", true)
+                findNavController().popBackStack()
+            }
+            .show()
 
     override fun onDestroyView() {
         dialog = null

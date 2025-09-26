@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
+import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialogEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,6 +30,9 @@ class TodoDetailViewModel @Inject constructor(
 
     private val _reloading = MutableLiveData(false)
     val reloading: LiveData<Boolean> = _reloading
+
+    private val _dialogEvent = MutableLiveData<TodoAlertDialogEvent<TodoAlertDialog>>()
+    val dialogEvent: LiveData<TodoAlertDialogEvent<TodoAlertDialog>> = _dialogEvent
 
     init {
         load()
@@ -56,11 +61,18 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    fun delete() {
+    fun updateDone(isDone: Boolean) {
         viewModelScope.launch {
-            val res = repository.delete(todoId)
-            if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
+            val res = repository.updateDone(todoId, isDone)
+            if (res.isFailure) {
+                onApiError("Todoチェックの更新エラー")
+            }
         }
+    }
+
+    suspend fun delete() {
+        val res = repository.delete(todoId)
+        if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
     }
 
     private suspend fun fetchTodo(id: Int) {
@@ -71,7 +83,19 @@ class TodoDetailViewModel @Inject constructor(
                 withContext(Dispatchers.Main) { _todo.value = it }
             }
         } else {
-            Log.e("TodoDetailViewModel", "Todo get failure")
+            Log.e(TAG, "Todo get failure")
+            onApiError(result.isFailure.toString())
         }
     }
+
+    private fun onApiError(msg: String) {
+        _dialogEvent.value = TodoAlertDialogEvent(
+            TodoAlertDialog(
+                title = msg,
+                // TODO 適切なメッセージに書き換え
+                message = "500エラー",
+            )
+        )
+    }
+
 }

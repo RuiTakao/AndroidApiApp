@@ -69,7 +69,11 @@ class TodoListFragment : Fragment() {
         }
 
         viewModel.todoList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it) {
+                todoListRecyclerView.post {
+                    todoListRecyclerView.smoothScrollToPosition(0)
+                }
+            }
             swipe.isRefreshing = false
         }
 
@@ -92,9 +96,7 @@ class TodoListFragment : Fragment() {
     private fun showDialog(dialog: TodoAlertDialog) =
         MaterialAlertDialogBuilder(requireContext()).setTitle(dialog.title)
             .setMessage(dialog.message)
-            .setPositiveButton(dialog.positiveText) { _, _ ->
-                viewModel.reloading()
-            }
+            .setPositiveButton(dialog.positiveText) { _, _ -> }
             .show()
 
     override fun onDestroy() {
