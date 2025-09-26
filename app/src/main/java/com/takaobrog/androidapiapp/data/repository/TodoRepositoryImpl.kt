@@ -1,6 +1,7 @@
 package com.takaobrog.androidapiapp.data.repository
 
 import android.util.Log
+import com.squareup.moshi.Moshi
 import com.takaobrog.androidapiapp.data.remote.TodoApiService
 import com.takaobrog.androidapiapp.domain.model.todo.CreateTodoRequest
 import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoDoneRequest
@@ -8,7 +9,9 @@ import com.takaobrog.androidapiapp.domain.model.todo.UpdateTodoRequest
 import com.takaobrog.androidapiapp.domain.repository.DeviceDataRepository
 import com.takaobrog.androidapiapp.domain.repository.TodoRepository
 import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
-import com.takaobrog.androidapiapp.time.TimeProvider
+import com.takaobrog.androidapiapp.util.log.httpLog
+import com.takaobrog.androidapiapp.util.log.prettyJsonWithMoshi
+import com.takaobrog.androidapiapp.util.time.TimeProvider
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Instant
@@ -25,12 +28,13 @@ class TodoRepositoryImpl @Inject constructor(
     private val apiService: TodoApiService,
     private val deviceDataRepository: DeviceDataRepository,
     private val time: TimeProvider,
+    private val moshi: Moshi,
 ) : TodoRepository {
     override suspend fun getTodoList(): Result<List<TodoUiModel>> {
         return try {
             val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
-                Log.d(TAG, "[getTodoList] success ${res.body().orEmpty()}")
+                httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(res.body().orEmpty(), moshi))
                 val list = res.body().orEmpty().mapNotNull { item ->
                     item.id?.let { id ->
                         TodoUiModel(
@@ -61,6 +65,7 @@ class TodoRepositoryImpl @Inject constructor(
             val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
                 val getTodo = res.body()
+                httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(getTodo, moshi))
                 getTodo?.id?.let { id ->
                     val todoUiModel = TodoUiModel(
                         id = id,
@@ -91,6 +96,7 @@ class TodoRepositoryImpl @Inject constructor(
             deviceId = deviceDataRepository.deviceId()
         )
         val res = apiService.create(createGetTodoResponseRequest)
+        httpLog(request = res.raw().request())
         if (!res.isSuccessful) throw HttpException(res)
     }
 
@@ -106,11 +112,13 @@ class TodoRepositoryImpl @Inject constructor(
                 updatedAt = updatedAt,
             )
             val res = apiService.update(id, updateTodoRequest)
+            httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(updateTodoRequest, moshi))
             if (!res.isSuccessful) throw HttpException(res)
         }
 
     override suspend fun delete(id: Int): Result<Unit> = runCatching {
         val res = apiService.delete(id)
+        httpLog(request = res.raw().request())
         if (!res.isSuccessful) throw HttpException(res)
     }
 
@@ -120,6 +128,7 @@ class TodoRepositoryImpl @Inject constructor(
             deviceId = deviceDataRepository.deviceId(),
         )
         val res = apiService.updateDone(id, updateTodoDoneRequest)
+        httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(updateTodoDoneRequest, moshi))
         if (!res.isSuccessful) throw HttpException(res)
     }
 

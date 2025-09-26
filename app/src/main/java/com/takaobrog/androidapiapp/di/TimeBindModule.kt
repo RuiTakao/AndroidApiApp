@@ -1,7 +1,7 @@
 package com.takaobrog.androidapiapp.di
 
-import com.takaobrog.androidapiapp.time.TimeProvider
-import com.takaobrog.androidapiapp.time.UtcTimeProvider
+import com.takaobrog.androidapiapp.util.time.TimeProvider
+import com.takaobrog.androidapiapp.util.time.UtcTimeProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -70,11 +70,9 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    fun delete() {
-        viewModelScope.launch {
-            val res = repository.delete(todoId)
-            if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
-        }
+    suspend fun delete() {
+        val res = repository.delete(todoId)
+        if (res.isFailure) Log.e(TAG, "[delete] delete todo failure")
     }
 
     private suspend fun fetchTodo(id: Int) {
@@ -89,6 +87,7 @@ class TodoDetailViewModel @Inject constructor(
             onApiError(result.isFailure.toString())
         }
     }
+
     private fun onApiError(msg: String) {
         _dialogEvent.value = TodoAlertDialogEvent(
             TodoAlertDialog(

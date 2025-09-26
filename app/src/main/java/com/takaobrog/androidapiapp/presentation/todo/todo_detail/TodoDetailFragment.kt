@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.databinding.DialogTodoEditBinding
 import com.takaobrog.androidapiapp.databinding.FragmentTodoDetailBinding
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TodoDetailFragment : Fragment() {
@@ -115,13 +117,16 @@ class TodoDetailFragment : Fragment() {
                 setOnShowListener {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
-                        viewModel.delete()
-                        findNavController().previousBackStackEntry
-                            ?.savedStateHandle
-                            ?.set("reload", true)
-                        findNavController().popBackStack()
-                        dismiss()
-                        Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT).show()
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            viewModel.delete()
+                            findNavController().previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("reload", true)
+                            findNavController().popBackStack()
+                            dismiss()
+                            Toast.makeText(requireContext(), "削除しました", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 }
                 show()
