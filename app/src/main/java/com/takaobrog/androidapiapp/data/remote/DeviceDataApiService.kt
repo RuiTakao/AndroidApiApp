@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface DeviceDataApiService {
-    @POST("devices/post/")
+    @POST("devices/post")
     suspend fun postDeviceData(
         @Body deviceData: PostDeviceDataRequest,
     ): Response<Unit>
