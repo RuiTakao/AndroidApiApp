@@ -6,4 +6,5 @@ import com.squareup.moshi.JsonClass
 data class UpdateTodoDoneRequest(
     val done: Boolean,
     val deviceId: String,
+    val updatedAt: String,
 )

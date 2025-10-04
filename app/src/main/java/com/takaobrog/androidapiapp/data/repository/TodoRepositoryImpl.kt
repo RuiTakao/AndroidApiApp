@@ -125,9 +125,13 @@ class TodoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateDone(id: Int, isDone: Boolean): Result<Unit> = runCatching {
+        val now = time.now()
+        val updatedAt = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+            .format(now.atOffset(ZoneOffset.UTC))
         val updateTodoDoneRequest = UpdateTodoDoneRequest(
             done = isDone,
             deviceId = deviceDataRepository.deviceId(),
+            updatedAt = updatedAt,
         )
         val res = apiService.updateDone(id, updateTodoDoneRequest)
         httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(updateTodoDoneRequest, moshi))
