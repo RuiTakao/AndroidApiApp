@@ -23,15 +23,30 @@ android {
     flavorDimensions += "env"
 
     productFlavors {
-        create("local") {
+        create("Local(CakePHP)") {
             dimension = "env"
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8765/\"")
-            resValue("string", "app_name", "Todo (local)")
+            resValue("string", "app_name", "Local(CakePHP)")
         }
-        create("prod") {
+        create("Local(Ktor)") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+            resValue("string", "app_name", "Local(Ktor)")
+        }
+        create("Xserver") {
             dimension = "env"
             buildConfigField("String", "BASE_URL", "\"https://takaopres.blog/android_api_server_app/\"")
-            resValue("string", "app_name", "Todo (debug)")
+            resValue("string", "app_name", "Xserver")
+        }
+        create("ConoHa(CakePHP)") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"http://163.44.121.31:8765/\"")
+            resValue("string", "app_name", "ConoHa(CakePHP)")
+        }
+        create("ConoHa(Ktor)") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"http://163.44.121.31:8080/\"")
+            resValue("string", "app_name", "ConoHa(Ktor)")
         }
     }
 
