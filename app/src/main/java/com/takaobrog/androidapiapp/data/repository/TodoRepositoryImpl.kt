@@ -30,11 +30,23 @@ class TodoRepositoryImpl @Inject constructor(
     private val time: TimeProvider,
     private val moshi: Moshi,
 ) : TodoRepository {
+    private val emptyTodoUiModel = TodoUiModel(
+        id = 0,
+        title = "",
+        memo = "",
+        done = false,
+        datetime = "",
+    )
+
     override suspend fun getTodoList(): Result<List<TodoUiModel>> {
+        if (deviceDataRepository.deviceId().isEmpty()) return Result.success(emptyList())
         return try {
             val res = apiService.getTodoList(deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
-                httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(res.body().orEmpty(), moshi))
+                httpLog(
+                    request = res.raw().request(),
+                    body = prettyJsonWithMoshi(res.body().orEmpty(), moshi)
+                )
                 val list = res.body().orEmpty().mapNotNull { item ->
                     item.id?.let { id ->
                         TodoUiModel(
@@ -61,6 +73,7 @@ class TodoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTodo(id: Int): Result<TodoUiModel> {
+        if (deviceDataRepository.deviceId().isEmpty()) return Result.success(emptyTodoUiModel)
         return try {
             val res = apiService.getTodo(id = id, deviceId = deviceDataRepository.deviceId())
             if (res.isSuccessful) {
@@ -114,7 +127,10 @@ class TodoRepositoryImpl @Inject constructor(
                 updatedAt = updatedAt,
             )
             val res = apiService.update(id, updateTodoRequest)
-            httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(updateTodoRequest, moshi))
+            httpLog(
+                request = res.raw().request(),
+                body = prettyJsonWithMoshi(updateTodoRequest, moshi)
+            )
             if (!res.isSuccessful) throw HttpException(res)
         }
 
@@ -134,7 +150,10 @@ class TodoRepositoryImpl @Inject constructor(
             updatedAt = updatedAt,
         )
         val res = apiService.updateDone(id, updateTodoDoneRequest)
-        httpLog(request = res.raw().request(), body = prettyJsonWithMoshi(updateTodoDoneRequest, moshi))
+        httpLog(
+            request = res.raw().request(),
+            body = prettyJsonWithMoshi(updateTodoDoneRequest, moshi)
+        )
         if (!res.isSuccessful) throw HttpException(res)
     }
 
