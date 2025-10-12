@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateDeviceIdViewModel @Inject constructor(
+class DeviceDataViewModel @Inject constructor(
     private val repository: DeviceDataRepository,
 ) : ViewModel() {
 
