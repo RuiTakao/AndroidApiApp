@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.core.domain.repository.TodoRepository
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialogEvent
-import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
+import com.takaobrog.core.domain.model.todo.TodoUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

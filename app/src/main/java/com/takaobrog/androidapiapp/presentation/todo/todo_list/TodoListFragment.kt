@@ -12,7 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.takaobrog.androidapiapp.R
 import com.takaobrog.androidapiapp.databinding.FragmentTodoListBinding
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
-import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
+import com.takaobrog.core.domain.model.todo.TodoUiModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
