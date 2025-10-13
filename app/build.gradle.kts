@@ -102,4 +102,6 @@ dependencies {
 
     // Swipe
     implementation(libs.androidx.swiperefreshlayout)
+
+    implementation(project(":core"))
 }
