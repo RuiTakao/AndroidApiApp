@@ -88,18 +88,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    // Moshi
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    kapt(libs.moshi.kotlin.codegen)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-
-    // DataStore preferences
-    implementation(libs.androidx.datastore.preferences)
-
     // Swipe
     implementation(libs.androidx.swiperefreshlayout)
+
+    implementation(project(":core"))
 }

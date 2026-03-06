@@ -1,7 +1,7 @@
 package com.takaobrog.androidapiapp.presentation.todo.todo_add
 
 import androidx.lifecycle.ViewModel
-import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.core.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

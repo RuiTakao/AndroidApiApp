@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.takaobrog.androidapiapp.R
 import com.takaobrog.androidapiapp.databinding.CellTodoListBinding
-import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
+import com.takaobrog.core.domain.model.todo.TodoUiModel
 
 class TodoListAdapter : ListAdapter<TodoUiModel, TodoListAdapter.VH>(DIFF) {
 
