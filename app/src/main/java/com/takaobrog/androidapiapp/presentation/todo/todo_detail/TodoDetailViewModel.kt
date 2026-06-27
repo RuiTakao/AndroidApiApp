@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.androidapiapp.domain.model.todo.TodoUiModel
-import com.takaobrog.androidapiapp.domain.repository.TodoRepository
+import com.takaobrog.core.domain.model.todo.TodoUiModel
+import com.takaobrog.core.domain.repository.TodoRepository
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialog
 import com.takaobrog.androidapiapp.presentation.todo.component.dialog.TodoAlertDialogEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,9 +50,9 @@ class TodoDetailViewModel @Inject constructor(
         }
     }
 
-    fun update(title: String, content: String) {
+    fun update(title: String, memo: String) {
         viewModelScope.launch {
-            val res = repository.update(todoId, title, content)
+            val res = repository.update(todoId, title, memo)
             if (res.isSuccess) {
                 fetchTodo(todoId)
             } else {

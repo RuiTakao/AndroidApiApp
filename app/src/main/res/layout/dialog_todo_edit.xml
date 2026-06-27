@@ -29,7 +29,7 @@
             android:layout_height="22dp" />
 
         <EditText
-            android:id="@+id/edit_content"
+            android:id="@+id/edit_memo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#FFF59D"

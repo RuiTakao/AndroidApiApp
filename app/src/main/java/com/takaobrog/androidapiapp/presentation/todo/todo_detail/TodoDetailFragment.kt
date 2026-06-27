@@ -34,18 +34,18 @@ class TodoDetailFragment : Fragment() {
         val datetime = binding.datetime
         val done = binding.isDone
         val title = binding.todoTitle
-        val content = binding.todoContent
+        val memo = binding.todoMemo
         val editBtn = binding.editBtn
         val deleteBtn = binding.deleteBtn
         val swipe = binding.swipe
         title.text = ""
-        content.text = ""
+        memo.text = ""
 
         viewModel.todo.observe(viewLifecycleOwner) {
             done.isChecked = it.done
             datetime.text = it.datetime
             title.text = it.title
-            content.text = it.content
+            memo.text = it.memo
             val dialogTitle = it.title
             deleteBtn.setOnClickListener {
                 showDeleteDialog(dialogTitle)
@@ -81,10 +81,10 @@ class TodoDetailFragment : Fragment() {
     private fun showEditDialog() {
         val dialogBinding = DialogTodoEditBinding.inflate(layoutInflater, null, false)
         val title = dialogBinding.editTitle
-        val content = dialogBinding.editContent
+        val memo = dialogBinding.editMemo
         viewModel.todo.observe(viewLifecycleOwner) {
             title.setText(it.title)
-            content.setText(it.content)
+            memo.setText(it.memo)
         }
         dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("編集")
@@ -97,8 +97,8 @@ class TodoDetailFragment : Fragment() {
                     val positive = getButton(AlertDialog.BUTTON_POSITIVE)
                     positive.setOnClickListener {
                         val title = title.text?.toString()?.trim().orEmpty()
-                        val content = content.text?.toString()?.trim().orEmpty()
-                        viewModel.update(title, content)
+                        val memo = memo.text?.toString()?.trim().orEmpty()
+                        viewModel.update(title = title,memo = memo)
                         dismiss()
                         Toast.makeText(requireContext(), "送信しました", Toast.LENGTH_SHORT).show()
                     }

@@ -18,7 +18,7 @@
 
     <!--  入力画面  -->
     <string name="todo_edit_title_label">タイトル</string>
-    <string name="todo_edit_content_label">内容</string>
+    <string name="todo_edit_content_label">メモ</string>
     <string name="todo_edit_create_btn">登録</string>
 
     <!--  詳細画面  -->
