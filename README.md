@@ -49,7 +49,3 @@ app/src/main/java/com/takaobrog/androidapiapp/
 ```bash
 ./gradlew assembleProdDebug
 ```
-
-## ライセンス
-
-[LICENSE](./LICENSE) ファイルを参照してください（※存在する場合）。
